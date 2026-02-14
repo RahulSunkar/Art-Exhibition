@@ -22,7 +22,7 @@ export function Navigation() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-foreground/10">
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-12 py-6 flex items-center justify-between">
         <Link to="/" className="font-serif text-xl tracking-tight">
-          Voyage Permanent
+          A Voyage to Permanence
         </Link>
 
         {/* Desktop Navigation */}

@@ -81,7 +81,7 @@ export function People() {
             People & Voices
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
-            At the heart of Voyage Permanent are the voices of those often rendered invisible—
+            At the heart of A Voyage to Permanence are the voices of those often rendered invisible—
             migrant workers, displaced communities, the uncounted and unheard. These are their
             stories, shared with consent and in partnership.
           </p>
@@ -168,7 +168,7 @@ export function People() {
           </h2>
           <div className="space-y-6 text-lg leading-relaxed text-muted-foreground mb-8">
             <p>
-              Voyage Permanent is an ongoing project. We continue to collect stories,
+              A Voyage to Permanence is an ongoing project. We continue to collect stories,
               testimonies, and experiences from communities around the world. If you would
               like to contribute your voice to this work, we would be honored to listen.
             </p>

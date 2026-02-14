@@ -18,7 +18,7 @@ export function About() {
               <h2 className="font-serif text-4xl mb-8 tracking-tight">The Concept</h2>
               <div className="space-y-6 text-lg leading-relaxed text-muted-foreground">
                 <p>
-                  Voyage Permanent emerges from a simple yet profound realization: that
+                  A Voyage to Permanence emerges from a simple yet profound realization: that
                   exploitation leaves its most enduring marks not in what is visible, but in
                   what remains invisible. In the stories never told. In the faces never
                   photographed. In the voices never recorded.
@@ -40,7 +40,7 @@ export function About() {
 
             <section>
               <h2 className="font-serif text-4xl mb-8 tracking-tight">
-                The Meaning of "Voyage Permanent"
+                The Meaning of "A Voyage to Permanence"
               </h2>
               <div className="space-y-6 text-lg leading-relaxed text-muted-foreground">
                 <p>

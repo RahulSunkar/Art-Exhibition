@@ -5,6 +5,7 @@ import { useState, useRef } from 'react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { artworks, films, products, locations, videos } from '../data/store';
 import hero_video from '../data/hero_video.mp4';
+import hero_image from '../data/Dhushor_Stills__2.8.1.jpg';
 
 
 export function Home() {
@@ -30,7 +31,7 @@ export function Home() {
   return (
     <div ref={scrollContainerRef} className="min-h-screen">
       {/* Running Banner */}
-      <Link to="/voyage">
+      {/* <Link to="/voyage">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -71,7 +72,7 @@ export function Home() {
           
           <div className="absolute bottom-0 left-0 right-0 h-0.5 md:h-1 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
         </motion.div>
-      </Link>
+      </Link> */}
 
       {/* Hero Section */}
       <section ref={containerRef} className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -127,7 +128,7 @@ export function Home() {
             </p>
             
             <p className="text-xs sm:text-sm md:text-base tracking-widest uppercase text-white/60">
-              New Delhi • Goa • Chennai
+              New Delhi • Goa • Chennai • Bengaluru
             </p>
           </motion.div>
         </motion.div>
@@ -147,43 +148,41 @@ export function Home() {
         </motion.div>
       </section>
 
-      {/* Exhibition Concept */}
-      <section className="py-16 md:py-24 lg:py-32 px-4 md:px-6 lg:px-12 max-w-screen-2xl mx-auto overflow-hidden">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, x: -100 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <h2 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-8 md:mb-12 tracking-tight leading-tight">
-              The
-              <br />
-              <span className="italic text-5xl sm:text-6xl md:text-8xl lg:text-9xl">Exhibition</span>
-            </h2>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, x: 100 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="space-y-6 md:space-y-8"
-          >
-            <p className="text-lg sm:text-xl md:text-2xl leading-relaxed text-muted-foreground">
-              Voyage Permanent is not a singular event—it is a continuous exploration, an exhibition that breathes across cities, through time, and within the spaces between documented history and lived experience.
-            </p>
-            
-            <p className="text-base sm:text-lg md:text-xl leading-relaxed text-muted-foreground">
-              We map the vertices—those intersections of lives, places, and stories—where exploitation becomes visible only in its absence. Where memory fractures and reforms. Where invisible people leave their mark on film, on paper, in silence.
-            </p>
-            
-            <p className="text-base sm:text-lg leading-relaxed text-muted-foreground">
-              This is an archive of what remains. Of what persists. Of what we carry forward even when we don't know we're carrying it.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+        {/* Exhibition Concept */}
+        <section className="relative h-screen overflow-hidden">
+
+          {/* Background Hero Image */}
+          <motion.img
+            src={hero_image} // make sure this is optimized .webp
+            alt="Exhibition Background"
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2 }}
+            className="absolute inset-0 w-full h-full object-cover"
+            loading="eager"
+            decoding="async"
+          />
+
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+
+          {/* Text Content */}
+          <div className="relative z-10 h-full flex items-center justify-center px-4 md:px-6 lg:px-12">
+            <div className="max-w-4xl mx-auto text-center">
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.3 }}
+                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed text-white font-light italic"
+              >
+                "The greyness is a philosophy as much as a colour – a world of ambiguity, where life and death, past and present, memory and imagination mingle like smoke over a river at dawn."
+              </motion.p>
+            </div>
+          </div>
+        </section>
+
+
 
       {/* Art Preview Grid */}
       <section className="py-16 md:py-24 lg:py-32 px-4 md:px-6 lg:px-12 bg-black text-white">
@@ -196,8 +195,8 @@ export function Home() {
             className="mb-12 md:mb-16"
           >
             <h2 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-4 md:mb-6 tracking-tight">
-              Art &<br />
-              <em className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl italic">Photography</em>
+              Alternative<br />
+              <em className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl italic">Photography Prints</em>
             </h2>
             
             {hasArtworkData ? (
@@ -306,10 +305,10 @@ export function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="mb-12 md:mb-16"
+          className="mb-8 md:mb-16"
         >
           <h2 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-4 md:mb-6 tracking-tight leading-tight">
-            <span className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl opacity-60">Two</span>
+            {/* <span className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl opacity-60">Two</span> */}
             <br />
             <em className="italic">Films</em>
           </h2>

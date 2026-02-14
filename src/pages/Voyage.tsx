@@ -10,7 +10,7 @@ export function Voyage() {
       country: 'India',
       chapter: 'Chapter One',
       status: 'Upcoming',
-      date: '10 March - 16 March 2024',
+      date: '10 March - 14 March 2026',
       description:
         'The inaugural voyage in New Delhi explored the intersection of colonial legacy and contemporary displacement, mapping stories from fishing communities and urban migrants.',
       venues: ['The Visual Art Gallery - India Habitat Centre'],
@@ -161,7 +161,7 @@ export function Voyage() {
             Bring the Exhibition to Your City
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed">
-            Voyage Permanent is designed to adapt and transform. We work with local
+            A Voyage to Permanence is designed to adapt and transform. We work with local
             communities, artists, and institutions to create unique iterations that
             respond to each city's specific histories and contexts.
           </p>

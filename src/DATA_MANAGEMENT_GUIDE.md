@@ -22,7 +22,7 @@ export const artworks: Artwork[] = [
     id: 10,  // Use next available ID
     title: 'Your Artwork Title',
     artist: 'Artist Name',
-    year: '2024',
+    year: '2026',
     medium: 'Photography',
     city: 'Mumbai',  // Chennai, Mumbai, or Goa
     theme: 'Memory',  // Memory, Identity, Place, Space, or Labor
@@ -54,7 +54,7 @@ export const films: Film[] = [
     poster: 'https://large-poster.jpg',
     videoUrl: 'https://your-video-url.mp4',  // Optional
     duration: '45 min',
-    year: '2024',
+    year: '2026',
     director: 'Director Name',
     synopsis: 'Full film synopsis paragraph...',
     stills: [
@@ -136,7 +136,7 @@ export const locations: Location[] = [
     country: 'India',
     chapter: 'Chapter Four',
     status: 'Upcoming',  // Completed, Current, or Upcoming
-    date: 'November - December 2024',
+    date: 'November - December 2026',
     description: 'Description of this exhibition chapter...',
     venues: ['Venue 1', 'Venue 2'],
     artworks: 180,  // Or 'TBA'
@@ -289,7 +289,7 @@ import { myNewContent } from '../data/store';
   id: 10,
   title: 'Coastal Memories',
   artist: 'Priya Sharma',
-  year: '2024',
+  year: '2026',
   medium: 'Digital Photography',
   city: 'Goa',
   theme: 'Memory',

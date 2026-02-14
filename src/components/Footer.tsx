@@ -6,7 +6,7 @@ export function Footer() {
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-12 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <h3 className="font-serif text-2xl mb-4">Voyage Permanent</h3>
+            <h3 className="font-Bebas Neue text-2xl mb-4">A Voyage to Permanence</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               An ongoing exploration of memory, exploitation, and the invisible threads that connect us all.
             </p>
@@ -44,7 +44,7 @@ export function Footer() {
         </div>
 
         <div className="mt-16 pt-8 border-t border-foreground/10 text-center text-sm text-muted-foreground">
-          <p>© 2025 Voyage Permanent. All rights reserved.</p>
+          <p>© 2025 A Voyage to Permanence. All rights reserved.</p>
         </div>
       </div>
     </footer>

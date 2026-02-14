@@ -79,8 +79,8 @@ export function Products() {
       format: 'Hardcover, 400 pages',
       dimensions: '12" × 16" (30.5cm × 40.6cm)',
       language: 'Multilingual (English, French, Portuguese, German, Spanish)',
-      publisher: 'Voyage Permanent Press',
-      year: '2024',
+      publisher: 'A Voyage to Permanence Press',
+      year: '2026',
       paper: 'Premium archival quality',
       binding: 'Thread-sewn hardcover'
     },
