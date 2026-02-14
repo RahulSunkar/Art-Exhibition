@@ -52,7 +52,7 @@ export function People() {
     {
       id: 6,
       name: 'Dr. S Boominathan',
-      location: 'Tamil Nadu',
+      location: 'New Delhi',
       story: 'Dr. S Boominathan has completed his  Diploma in Design and Direction from the National School of Drama, New Delhi – widely regarded as the foremost theatre school  in India & finest in the world and Doctorate in Literature from the Chennai university.  He is also the founder and director of Bhooloham theatre trust in Dindigul. He was one of the faculty at Anupam Kher’s Actor Prepares and Radaan media works, Chennai. He has worked in more than 45 colleges as theatre practitioner. He was organiser of the theatre festival like Terukuththu festival, children theatre festival in Tamil Nadu. He has acted in more than 35 plays, directed and designed more than 53 plays such as Tartuffe, Forest, Prasatham, Towards the Gap, Not Like you,  Ajeeb Dastan and many others. He conducts Children’s theatre workshops in India & abroad.',
       image: Dr_S_Boominathan,
       theme: 'Theatre Practitioner | Educator',
@@ -71,7 +71,7 @@ export function People() {
   return (
     <div className="min-h-screen pt-32 pb-20">
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-12">
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -85,10 +85,10 @@ export function People() {
             migrant workers, displaced communities, the uncounted and unheard. These are their
             stories, shared with consent and in partnership.
           </p>
-        </motion.div>
+        </motion.div> */}
 
         {/* Introduction */}
-        <motion.section
+        {/* <motion.section
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -111,7 +111,7 @@ export function People() {
               frameworks of understanding.
             </p>
           </div>
-        </motion.section>
+        </motion.section> */}
 
         {/* Voices Grid */}
         <div className="space-y-24">

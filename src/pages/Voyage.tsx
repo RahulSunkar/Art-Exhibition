@@ -32,10 +32,10 @@ export function Voyage() {
           <h1 className="font-serif text-6xl md:text-8xl mb-8 tracking-tight">
             The Voyage
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mb-20 leading-relaxed">
+          {/* <p className="text-xl text-muted-foreground max-w-3xl mb-20 leading-relaxed">
             An exhibition that moves, transforms, and adapts. Each city becomes a new chapter
             in an ongoing story of memory, displacement, and the vertices where lives intersect.
-          </p>
+          </p> */}
         </motion.div>
 
         <div className="space-y-32">
@@ -157,21 +157,21 @@ export function Voyage() {
           transition={{ duration: 0.8 }}
           className="mt-32 pt-20 border-t border-foreground/10"
         >
-          <h2 className="font-serif text-4xl md:text-5xl mb-8 tracking-tight">
+          {/* <h2 className="font-serif text-4xl md:text-5xl mb-8 tracking-tight">
             Bring the Exhibition to Your City
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed">
+          </h2> */}
+          {/* <p className="text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed">
             A Voyage to Permanence is designed to adapt and transform. We work with local
             communities, artists, and institutions to create unique iterations that
             respond to each city's specific histories and contexts.
-          </p>
-          <motion.a
+          </p> */}
+          {/* <motion.a
             href="/contact"
             whileHover={{ x: 10 }}
             className="inline-flex items-center gap-2 text-accent border-b border-accent pb-1"
           >
             Contact Us About Hosting
-          </motion.a>
+          </motion.a> */}
         </motion.section>
       </div>
     </div>

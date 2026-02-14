@@ -71,13 +71,13 @@ export function Products() {
   const coffeeTableBooks = {
     id: 'coffee-table-books',
     title: 'Coffee Table Books',
-    subtitle: 'Exhibition Catalogs & Collections',
-    description: 'A comprehensive documentation of the exhibition across all cities. These hardcover editions feature photography, essays, and testimonies that preserve the cultural memory of our journey.',
+    subtitle: '',
+    description: "",
     icon: Book,
     images: [coffeTableBook_1, coffeTableBook_2, coffeTableBook_3, coffeTableBook_4],
     details: {
-      format: 'Hardcover, 400 pages',
-      dimensions: '12" × 16" (30.5cm × 40.6cm)',
+      format: 'Hardcover, 100 pages',
+      dimensions: '12" × 16 " (30.5cm × 40.6cm)',
       language: 'Multilingual (English, French, Portuguese, German, Spanish)',
       publisher: 'A Voyage to Permanence Press',
       year: '2026',
@@ -91,9 +91,9 @@ export function Products() {
   // Frames Data
   const frames = {
     id: 'frames',
-    title: 'Art Prints & Frames',
-    subtitle: 'Gallery-Quality Reproductions',
-    description: 'Selected works from the exhibition, professionally printed and framed. Each piece is produced using archival-quality materials and ethical manufacturing practices.',
+    title: 'Prints',
+    subtitle: '',
+    description: ' ',
     icon: Frame,
     images: [Frames_1, Frames_2, Frames_3],
     details: {
@@ -104,7 +104,7 @@ export function Products() {
       production: 'Made in partnership with local artisans',
       mounting: 'Acid-free mat board'
     },
-    concept: 'These frames allow you to bring the exhibition into your home or workspace. Each print is carefully selected to represent key moments from our voyage, produced with the same ethical considerations that guide all our work.',
+    concept: '',
     price: 'Available at exhibition venues'
   };
 
@@ -123,9 +123,9 @@ export function Products() {
 
   const notebooksCollection = {
     id: 'notebooks',
-    title: 'City Collection Notebooks',
-    subtitle: 'Nine Cities, Nine Stories',
-    description: 'Each notebook celebrates a different city from our exhibition journey. Featuring original artwork and cultural elements from Bangalore, Chennai, Delhi, Goa, Kolkata, Jaipur, Kochi, Lucknow, and Varanasi.',
+    title: 'Art Note Books',
+    subtitle: '',
+    description: '',
     icon: FileText,
     notebooks: notebooks,
     details: {
@@ -153,8 +153,8 @@ export function Products() {
   const toteBagsCollection = {
     id: 'tote-bags',
     title: 'Exhibition Tote Bags',
-    subtitle: 'Ethical & Sustainable',
-    description: 'Heavy canvas tote bags featuring original artwork from six Indian cities. Each bag is produced ethically in partnership with worker cooperatives, using sustainable materials and fair-wage practices.',
+    subtitle: '',
+    description: '',
     icon: ShoppingBag,
     bags: toteBags,
     details: {
@@ -191,7 +191,7 @@ export function Products() {
               Artifacts
             </motion.em>
           </h1>
-          <motion.p 
+          {/* <motion.p 
             className="text-xl text-gray-600 max-w-3xl leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -200,7 +200,7 @@ export function Products() {
             These are not products—they are cultural artifacts that extend the exhibition
             beyond gallery walls. Each object is produced ethically and designed to carry
             the memory of the work forward.
-          </motion.p>
+          </motion.p> */}
         </motion.div>
 
         {/* COFFEE TABLE BOOKS SECTION */}
@@ -271,7 +271,7 @@ export function Products() {
           </div>
 
           {/* Details Grid */}
-          <motion.div 
+          {/* <motion.div 
             className="bg-gray-50 p-8 mb-8"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -295,9 +295,9 @@ export function Products() {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </motion.div> */}
 
-          <motion.div 
+          {/* <motion.div 
             className="max-w-3xl"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -309,7 +309,7 @@ export function Products() {
               {coffeeTableBooks.concept}
             </p>
             <div className="text-lg font-medium">{coffeeTableBooks.price}</div>
-          </motion.div>
+          </motion.div> */}
         </motion.section>
 
         {/* FRAMES SECTION */}
@@ -380,7 +380,7 @@ export function Products() {
           </div>
 
           {/* Details Grid */}
-          <motion.div 
+          {/* <motion.div 
             className="bg-gray-50 p-8 mb-8"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -404,9 +404,9 @@ export function Products() {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </motion.div> */}
 
-          <motion.div 
+          {/* <motion.div 
             className="max-w-3xl"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -418,7 +418,7 @@ export function Products() {
               {frames.concept}
             </p>
             <div className="text-lg font-medium">{frames.price}</div>
-          </motion.div>
+          </motion.div> */}
         </motion.section>
 
         {/* NOTEBOOKS SECTION */}
@@ -509,7 +509,7 @@ export function Products() {
           </div>
 
           {/* Details Grid */}
-          <motion.div 
+          {/* <motion.div 
             className="bg-gray-50 p-8 mb-8"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -533,9 +533,9 @@ export function Products() {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </motion.div> */}
 
-          <motion.div 
+          {/* <motion.div 
             className="max-w-3xl"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -547,7 +547,7 @@ export function Products() {
               {notebooksCollection.concept}
             </p>
             <div className="text-lg font-medium">{notebooksCollection.price}</div>
-          </motion.div>
+          </motion.div> */}
         </motion.section>
 
         {/* TOTE BAGS SECTION */}
@@ -634,7 +634,7 @@ export function Products() {
           </div>
 
           {/* Details Grid */}
-          <motion.div 
+          {/* <motion.div 
             className="bg-gray-50 p-8 mb-8"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -658,9 +658,9 @@ export function Products() {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </motion.div> */}
 
-          <motion.div 
+          {/* <motion.div 
             className="max-w-3xl"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -672,7 +672,7 @@ export function Products() {
               {toteBagsCollection.concept}
             </p>
             <div className="text-lg font-medium">{toteBagsCollection.price}</div>
-          </motion.div>
+          </motion.div> */}
         </motion.section>
 
         {/* Availability Note */}
