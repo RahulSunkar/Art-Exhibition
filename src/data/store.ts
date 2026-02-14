@@ -341,7 +341,7 @@ export const locations: Location[] = [
     chapter: 'Chapter One',
     status: 'Upcoming',
     date: '10 March - 14 March 2026',
-    description: 'The inaugural voyage in New Delhi explored the intersection of colonial legacy and contemporary displacement, mapping stories from fishing communities and urban migrants.',
+    description: '',
     venues: ['The Visual Art Gallery - India Habitat Centre'],
     artworks: 156,
     images: [

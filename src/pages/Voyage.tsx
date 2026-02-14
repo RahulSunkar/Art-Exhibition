@@ -12,7 +12,7 @@ export function Voyage() {
       status: 'Upcoming',
       date: '10 March - 14 March 2026',
       description:
-        'The inaugural voyage in New Delhi explored the intersection of colonial legacy and contemporary displacement, mapping stories from fishing communities and urban migrants.',
+        '',
       venues: ['The Visual Art Gallery - India Habitat Centre'],
       artworks: 'TBA',
       poster: poster, 
@@ -127,22 +127,22 @@ export function Voyage() {
                 </p>
 
                 {/* Artworks */}
-                <div className="border-l-2 border-foreground/10 pl-6">
+                {/* <div className="border-l-2 border-foreground/10 pl-6">
                   <div className="text-sm text-muted-foreground mb-1">
                     Artworks
                   </div>
                   <div className="text-3xl font-serif">
                     {location.artworks}
                   </div>
-                </div>
+                </div> */}
 
                 {/* CTA */}
-                <motion.button
+                {/* <motion.button
                   whileHover={{ x: 10 }}
                   className="flex items-center gap-2 text-accent border-b border-accent pb-1 mt-8"
                 >
                   Learn More
-                </motion.button>
+                </motion.button> */}
 
               </div>
             </motion.article>
