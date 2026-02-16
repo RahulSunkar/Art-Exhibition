@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'motion/react';
-import { ChevronDown, Camera } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { Link } from 'react-router';
 import { useState, useRef } from 'react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
@@ -76,7 +76,7 @@ export function Home() {
 
       {/* Hero Section */}
       <section ref={containerRef} className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background z-10" />
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background z-10" /> */}
         
         <motion.video
           style={{ opacity, scale }}
@@ -98,7 +98,7 @@ export function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
-            <h1 className="font-serif text-5xl sm:text-6xl md:text-8xl lg:text-9xl mb-6 md:mb-8 tracking-tighter leading-none">
+            <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl mb-6 md:mb-8 tracking-wider leading-none" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
               A Voyage to
               <br />
               <span className="italic">Permanence</span>
@@ -111,7 +111,7 @@ export function Home() {
             transition={{ duration: 1, delay: 0.3 }}
             className="mb-8 md:mb-12"
           >
-            <p className="font-serif text-2xl sm:text-3xl md:text-5xl tracking-wide opacity-70">
+            <p className="text-2xl sm:text-3xl md:text-5xl tracking-wide opacity-70" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 400 }}>
               Celebration of visual poetry
             </p>
           </motion.div>
@@ -122,12 +122,12 @@ export function Home() {
             transition={{ duration: 1, delay: 0.6 }}
             className="space-y-4 md:space-y-6"
           >
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed max-w-4xl mx-auto font-light">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed max-w-4xl mx-auto" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 400 }}>
               An immersive experience of <em className="font-serif">audio visual frames</em>, 
               alternative prints, and performances on three experimental films of Purandar Chaudhuri
             </p>
             
-            <p className="text-xs sm:text-sm md:text-base tracking-widest uppercase text-white/60">
+            <p className="text-xs sm:text-sm md:text-base tracking-widest uppercase text-white/60" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 400 }}>
               New Delhi • Goa • Chennai • Bengaluru
             </p>
           </motion.div>
@@ -244,20 +244,6 @@ export function Home() {
               transition={{ duration: 0.8 }}
               className="py-24 md:py-32 text-center"
             >
-              <motion.div
-                animate={{ 
-                  rotate: [0, 10, -10, 10, 0],
-                }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="inline-block mb-8"
-              >
-                <Camera className="w-20 h-20 md:w-24 md:h-24 text-white" strokeWidth={1.5} />
-              </motion.div>
-              
               <h3 className="font-serif text-3xl sm:text-4xl md:text-6xl mb-6 italic">
                 In the Darkroom
               </h3>
