@@ -88,7 +88,7 @@ export function Home() {
         >
           <source src={hero_video} type="video/mp4" />
         </motion.video>
-
+        
         <motion.div 
           style={{ y }}
           className="relative z-20 text-center text-white px-4 md:px-6 max-w-6xl"
@@ -98,20 +98,26 @@ export function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
-            <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl mb-6 md:mb-8 tracking-wider leading-none" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
+            <h1
+              className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl mb-6 md:mb-8 tracking-wider leading-none"
+              style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+            >
               A Voyage to
               <br />
-              <span className="italic">Permanence</span>
+              Permanence
             </h1>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.3 }}
             className="mb-8 md:mb-12"
           >
-            <p className="text-2xl sm:text-3xl md:text-5xl tracking-wide opacity-70" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 400 }}>
+            <p
+              className="text-xl sm:text-2xl md:text-4xl tracking-wide opacity-70"
+              style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 400 }}
+            >
               Celebration of visual poetry
             </p>
           </motion.div>
@@ -122,12 +128,18 @@ export function Home() {
             transition={{ duration: 1, delay: 0.6 }}
             className="space-y-4 md:space-y-6"
           >
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed max-w-4xl mx-auto" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 400 }}>
-              An immersive experience of <em className="font-serif">audio visual frames</em>, 
+            <p
+              className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-4xl mx-auto"
+              style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 400 }}
+            >
+              An immersive experience of <em className="italic">audio visual frames</em>,{" "}
               alternative prints, and performances on three experimental films of Purandar Chaudhuri
             </p>
-            
-            <p className="text-xs sm:text-sm md:text-base tracking-widest uppercase text-white/60" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 400 }}>
+
+            <p
+              className="text-xs sm:text-xs md:text-sm tracking-widest uppercase text-white/60"
+              style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 400 }}
+            >
               New Delhi • Goa • Chennai • Bengaluru
             </p>
           </motion.div>
