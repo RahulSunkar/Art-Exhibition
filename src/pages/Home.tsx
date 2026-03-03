@@ -179,8 +179,8 @@ export function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
 
           {/* Text Content */}
-          <div className="relative z-10 h-full flex items-center justify-center px-4 md:px-6 lg:px-12">
-            <div className="max-w-4xl mx-auto text-center">
+         < div className="relative z-10 h-full flex items-center justify-center px-6 pt-[18vh]">
+             <div className="max-w-4xl mx-auto text-center">
               <motion.p
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -218,7 +218,7 @@ export function Home() {
               </p>
             ) : (
               <p className="text-white/60 text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed">
-                Something extraordinary is brewing in our darkroom...
+                
               </p>
             )}
           </motion.div>
@@ -256,9 +256,6 @@ export function Home() {
               transition={{ duration: 0.8 }}
               className="py-24 md:py-32 text-center"
             >
-              <h3 className="font-serif text-3xl sm:text-4xl md:text-6xl mb-6 italic">
-                In the Darkroom
-              </h3>
               
               <p className="text-white/70 text-lg sm:text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed mb-4">
                 Our visual archive is currently being <span className="text-white font-serif">curated</span>, 

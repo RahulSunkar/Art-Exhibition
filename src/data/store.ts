@@ -18,7 +18,7 @@ import Termors_Still_5 from './FilmsData/Tremors_Still_5.jpg';
 import Termors_Still_6 from './FilmsData/Tremors_Still_6.jpg';
 import Dushor_Poster1 from './FilmsData/Dushor_Poster1.jpg';
 import Dushor_Poster2 from './FilmsData/Dushor_Poster2.jpg';
-// import Dushor_Trailer from './FilmsData/Dushor_Trailer.mp4';
+import Dushor_Trailer from './FilmsData/Dhushor_FHD_Trailer_01.mp4';
 import Dushor_Still_1 from './FilmsData/Dushor_Still_1.jpg';
 import Dushor_Still_2 from './FilmsData/Dushor_Still_2.jpg';
 import Dushor_Still_3 from './FilmsData/Dushor_Still_3.jpg';
@@ -192,7 +192,7 @@ export const films: Film[] = [
     description: 'A solitary traveller moves through monochrome landscapes, where silence, memory, and time merge into an inward journey of quiet recognition.',
     image: Dushor_Poster1,
     poster: Dushor_Poster1,
-    videoUrl: TremorsTrailer,
+    videoUrl: Dushor_Trailer``,
     duration: '55:14 min',
     year: '2026',
     director: 'Sachin',
