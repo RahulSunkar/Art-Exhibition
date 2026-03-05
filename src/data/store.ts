@@ -29,7 +29,8 @@ import CoffeeTableBook_3 from './ArtifactData/Coffee Table book/AVTP_Square_Book
 import Totes from './ArtifactData/ToteBags/LIAB_Tote_Mockup02_001.jpg';
 import frams from './ArtifactData/Frames/fd1a2e559fdc66a9ddc161d73e583877_1.jpg';
 import NoteBooks from './ArtifactData/Note Books/Bangalore_FrontCOver_Mockup.jpg';
-
+import impressionOfmingling from './FilmsData/Impression_Of_mingling_Poster_01.jpg';
+import ImperssionOfMingling_Trailer from './FilmsData/Impressions of Mingling_Trailer_02.mp4';
 
 // ============================================
 // ARTWORKS - Add/Edit artworks here
@@ -192,7 +193,7 @@ export const films: Film[] = [
     description: 'A solitary traveller moves through monochrome landscapes, where silence, memory, and time merge into an inward journey of quiet recognition.',
     image: Dushor_Poster1,
     poster: Dushor_Poster1,
-    videoUrl: Dushor_Trailer``,
+    videoUrl: Dushor_Trailer,
     duration: '55:14 min',
     year: '2026',
     director: 'Sachin',
@@ -222,6 +223,44 @@ export const films: Film[] = [
       { role: 'Traveller', name: 'Chiraag Paul'},
     ],
   },
+   {
+    id: 3,
+    title: 'Impressions of Mingling',
+    subtitle: 'A Journey Through the Grey Between Beginning and End',
+    description: 'A solitary traveller moves through monochrome landscapes, where silence, memory, and time merge into an inward journey of quiet recognition.',
+    image: impressionOfmingling,
+    poster: impressionOfmingling,
+    videoUrl: ImperssionOfMingling_Trailer,
+    duration: '55:14 min',
+    year: '2026',
+    director: 'Sachin',
+    synopsis: 'Ageless riverbanks, monumental ruins, historic battlefields - A lone traveller wanders around these landscapessearching not for destinations but for the secret pulse of existence itself. A journey through time, memory, and the grey hinterland between origin and finality.',
+    stills: [
+      Dushor_Still_1,
+      Dushor_Still_2,
+      Dushor_Still_3,
+      Dushor_Still_4,
+      Dushor_Still_5,
+      Dushor_Still_6,
+    ],
+     screenings: [
+      { venue: 'The Visual Art Gallery - India Habitat Centre', city: 'New Delhi', date: 'March 10-14, 2026' },
+      { venue: 'Museum of Goa', city: 'Goa', date: 'March 19-24, 2026' },
+      { venue: 'Alliance Française of Madras', city: 'Chennai', date: 'March 10-14, 2026' },
+    ],
+    themes: ['Journey as inner exploration', 'Time, memory, and impermanence', 'solitude and contemplation'],
+    languages: ['Urdu','Hindi','Subtitle-English'],
+    credits: [
+      { role: 'Cinematography', name: 'Sachin' },
+      { role: 'Editor & Cinematic Inputs', name: 'Prakash Braggs' },
+      { role: 'Sound Recording & Design', name: 'Prabhat Shetty' },
+      { role: 'Executive Produce', name: 'Vishnu Reddy' },
+      { role: 'Produced by', name: 'Sai Media & Entertainment & Chitramaya' },
+      { role: 'Story, Screenplay & Direction', name: 'Purandar Chaudhuri'},
+      { role: 'Traveller', name: 'Chiraag Paul'},
+    ],
+  },
+  
 ];
 
 // ============================================
