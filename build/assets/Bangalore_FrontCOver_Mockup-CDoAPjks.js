@@ -1,0 +1,1 @@
+const o="/assets/AVTP_Square_Book_Mockup_3-B1on9_8x.jpg",s="/assets/LIAB_Tote_Mockup02_001-Bbj6NJjh.jpg",e="/assets/fd1a2e559fdc66a9ddc161d73e583877_1-DvW1dzea.jpg",a="/assets/Bangalore_FrontCOver_Mockup-CWoi8l-S.jpg";export{e as F,a as N,o as c,s as t};

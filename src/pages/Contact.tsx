@@ -74,9 +74,7 @@ export function Contact() {
           </h1>
 
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
-            Art. Exhibition. Cultural Production.  
-            We welcome collaborations, exhibition hosting inquiries, 
-            and institutional partnerships.
+            
           </p>
         </motion.div>
 
@@ -158,40 +156,6 @@ export function Contact() {
               </div>
             </section>
 
-            {/* Business Areas */}
-            <section>
-              <h2 className="font-serif text-3xl mb-6 tracking-tight">
-                Areas of Work
-              </h2>
-
-              <div className="space-y-6">
-
-                <div className="border-l-2 border-accent pl-6">
-                  <h3 className="mb-2">Exhibition Hosting</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Partner with us to host curated exhibitions and cultural
-                    showcases across institutions and independent venues.
-                  </p>
-                </div>
-
-                <div className="border-l-2 border-accent pl-6">
-                  <h3 className="mb-2">Art Production</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    We conceptualize and produce visual art experiences that
-                    connect communities and contemporary narratives.
-                  </p>
-                </div>
-
-                <div className="border-l-2 border-accent pl-6">
-                  <h3 className="mb-2">Cultural Collaborations</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Strategic partnerships with galleries, institutions,
-                    and independent artists.
-                  </p>
-                </div>
-
-              </div>
-            </section>
 
           </motion.div>
 
