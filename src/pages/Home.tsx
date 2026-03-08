@@ -1,16 +1,48 @@
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
 import { Link } from 'react-router';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { artworks, films, products, locations, videos } from '../data/store';
 import hero_video from '../data/hero_video.mp4';
 import hero_image from '../data/Dhushor_Stills__2.8.1.jpg';
 
+// Image component with blur-up effect
+function BlurImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  return (
+    <motion.div className="relative overflow-hidden w-full h-full">
+      {/* Blurred placeholder */}
+      <motion.img
+        src={src}
+        alt={alt}
+        className={`${className} blur-md scale-110 absolute inset-0`}
+        initial={{ opacity: 1 }}
+        animate={{ opacity: isLoading ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+      />
+      {/* Full resolution image */}
+      <motion.img
+        src={src}
+        alt={alt}
+        className={`${className} absolute inset-0`}
+        onLoadingComplete={() => setIsLoading(false)}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isLoading ? 0 : 1 }}
+        transition={{ duration: 0.5 }}
+        loading="lazy"
+        decoding="async"
+      />
+    </motion.div>
+  );
+}
+
 
 export function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -20,6 +52,7 @@ export function Home() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
   const y = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
+  const rotateY = useTransform(scrollYProgress, [0, 0.5], [0, 5]);
 
   const previewArtworks = artworks.slice(0, 6);
   const previewFilms = films.slice(0, 2);
@@ -28,8 +61,21 @@ export function Home() {
 
   const hasArtworkData = previewArtworks.length > 0;
 
+  // Preload critical images
+  useEffect(() => {
+    const imagesToPreload = [hero_image, ...previewArtworks.map(a => a.image), ...previewFilms.map(f => f.image)];
+    imagesToPreload.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [previewArtworks, previewFilms]);
+
   return (
-    <div ref={scrollContainerRef} className="min-h-screen">
+    <div ref={scrollContainerRef} className="min-h-screen"
+      onMouseMove={(e) => {
+        setMousePosition({ x: e.clientX, y: e.clientY });
+      }}
+    >
       {/* Running Banner */}
       {/* <Link to="/voyage">
         <motion.div
@@ -76,10 +122,13 @@ export function Home() {
 
       {/* Hero Section */}
       <section ref={containerRef} className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background z-10" /> */}
         
         <motion.video
-          style={{ opacity, scale }}
+          style={{ 
+            opacity, 
+            scale,
+            filter: 'brightness(1.15)'
+          }}
           autoPlay
           muted
           loop
@@ -93,69 +142,130 @@ export function Home() {
           style={{ y }}
           className="relative z-20 text-center text-white px-4 md:px-6 max-w-6xl"
         >
+          {/* Main Title with staggered animation */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ 
+              duration: 1.2,
+              ease: "easeOut",
+              type: "spring",
+              stiffness: 100,
+              damping: 30
+            }}
           >
             <h1
               className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl mb-6 md:mb-8 tracking-wider leading-none"
               style={{ fontFamily: "'Bebas Neue', sans-serif" }}
             >
-              A Voyage to
+              <motion.span
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.2, delay: 0.2 }}
+                className="inline-block"
+              >
+                A Voyage to
+              </motion.span>
               <br />
-              Permanence
+              <motion.span
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 1.2, 
+                  delay: 0.4,
+                  type: "spring",
+                  stiffness: 80
+                }}
+                className="inline-block"
+              >
+                Permanence
+              </motion.span>
             </h1>
           </motion.div>
 
+          {/* Subtitle with fade-in */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
+            transition={{ duration: 1.2, delay: 0.5 }}
             className="mb-8 md:mb-12"
           >
-            <p
+            <motion.p
               className="text-xl sm:text-2xl md:text-4xl tracking-wide opacity-70"
               style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 400 }}
+              animate={{ 
+                opacity: [0.7, 0.85, 0.7]
+              }}
+              transition={{ 
+                duration: 3, 
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
             >
               Celebration of visual poetry
-            </p>
+            </motion.p>
           </motion.div>
 
+          {/* Description with staggered lines */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.6 }}
+            transition={{ duration: 1.2, delay: 0.7 }}
             className="space-y-4 md:space-y-6"
           >
-            <p
+            <motion.p
               className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-4xl mx-auto"
               style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 400 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.8 }}
             >
-              An immersive experience of <em className="italic">audio visual frames</em>,{" "}
-              alternative prints, and performances on three experimental films of Purandar Chaudhuri
-            </p>
+              An immersive experience of <motion.em 
+                className="italic"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                audio visual frames
+              </motion.em>, 
+              {" "} alternative prints, and performances on three experimental films of Purandar Chaudhuri
+            </motion.p>
 
-            <p
+            <motion.p
               className="text-xs sm:text-xs md:text-sm tracking-widest uppercase text-white/60"
               style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 400 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 1 }}
             >
               New Delhi • Goa • Chennai • Bengaluru
-            </p>
+            </motion.p>
           </motion.div>
         </motion.div>
 
+        {/* Animated Scroll Indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
+          transition={{ duration: 1.2, delay: 1.2 }}
           className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 z-20"
         >
           <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ y: [0, 12, 0] }}
+            transition={{ 
+              duration: 2.5, 
+              repeat: Infinity, 
+              ease: "easeInOut"
+            }}
+            className="relative"
           >
             <ChevronDown className="w-6 h-6 md:w-8 md:h-8 text-white" strokeWidth={1} />
+            <motion.div
+              animate={{ opacity: [1, 0] }}
+              transition={{ duration: 2.5, repeat: Infinity }}
+              className="absolute inset-0"
+            >
+              <ChevronDown className="w-6 h-6 md:w-8 md:h-8 text-white" strokeWidth={1} />
+            </motion.div>
           </motion.div>
         </motion.div>
       </section>
@@ -163,34 +273,58 @@ export function Home() {
         {/* Exhibition Concept */}
         <section className="relative h-screen overflow-hidden">
 
-          {/* Background Hero Image */}
-          <motion.img
-            src={hero_image} // make sure this is optimized .webp
-            alt="Exhibition Background"
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2 }}
-            className="absolute inset-0 w-full h-full object-cover"
-            loading="eager"
-            decoding="async"
-          />
+          {/* Background Hero Image with parallax */}
+          <motion.div
+            initial={{ opacity: 0, scale: 1.05 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <ImageWithFallback
+              src={hero_image}
+              alt="Exhibition Background"
+              className="w-full h-full object-cover"
+              style={{ filter: 'brightness(1.1)' }}
+              loading="eager"
+              decoding="async"
+            />
+          </motion.div>
 
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+          {/* Animated Gradient Overlay */}
+{/* overlay removed to preserve full image color */}
+          {/* no gradient */}
 
-          {/* Text Content */}
-         < div className="relative z-10 h-full flex items-center justify-center px-6 pt-[18vh]">
-             <div className="max-w-4xl mx-auto text-center">
+          {/* Text Content with smooth entrance */}
+          <div className="relative z-10 h-full flex items-center justify-center px-6 pt-[18vh]">
+            <motion.div 
+              className="max-w-4xl mx-auto text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: "easeOut" }}
+            >
               <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.3 }}
                 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed text-white font-light italic"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, delay: 0.2 }}
               >
-                "The greyness is a philosophy as much as a colour – a world of ambiguity, where life and death, past and present, memory and imagination mingle like smoke over a river at dawn."
+                <motion.span
+                  animate={{ 
+                    textShadow: [
+                      '0 0 0px rgba(255, 255, 255, 0)',
+                      '0 0 20px rgba(255, 255, 255, 0.3)',
+                      '0 0 0px rgba(255, 255, 255, 0)'
+                    ]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  "The greyness is a philosophy as much as a colour – a world of ambiguity, where life and death, past and present, memory and imagination mingle like smoke over a river at dawn."
+                </motion.span>
               </motion.p>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -203,13 +337,29 @@ export function Home() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="mb-12 md:mb-16"
           >
-            <h2 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-4 md:mb-6 tracking-tight">
-              Alternative<br />
-              <em className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl italic">Photography Prints</em>
-            </h2>
+            <motion.h2 
+              className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-4 md:mb-6 tracking-tight"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.1 }}
+            >
+              Alternative
+              <br />
+              <motion.em 
+                className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl italic block "
+                style={{ color: "#704c36" }}
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.2 }}
+              >
+                Photography Prints
+              </motion.em>
+            </motion.h2>
             
             {hasArtworkData ? (
               <p className="text-white/60 text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed">
@@ -223,28 +373,58 @@ export function Home() {
 
           {hasArtworkData ? (
             <>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 lg:gap-8 mb-8 md:mb-12">
+              <motion.div 
+                className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 lg:gap-8 mb-8 md:mb-12"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ staggerChildren: 0.1, delayChildren: 0.2 }}
+              >
                 {previewArtworks.map((artwork, index) => (
                   <motion.div
                     key={artwork.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
                     viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="aspect-[3/4] relative overflow-hidden group cursor-pointer"
+                    transition={{ 
+                      duration: 0.6, 
+                      delay: index * 0.08,
+                      ease: "easeOut"
+                    }}
+                    whileHover={{ y: -10 }}
+                    className="aspect-[3/4] relative overflow-hidden group cursor-pointer rounded-sm"
                   >
                     <ImageWithFallback
                       src={artwork.image}
                       alt={artwork.title}
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                      className="w-full h-full object-cover  transition-all duration-700"
                     />
                     
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 md:p-6">
-                      <p className="text-white font-serif text-base md:text-xl lg:text-2xl">{artwork.title}</p>
-                    </div>
+                    {/* Animated overlay */}
+                    <motion.div 
+                      className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.4 }}
+                    />
+                    
+                    <motion.div 
+                      className="absolute inset-0 flex items-end p-3 md:p-6"
+                      initial={{ y: 10, opacity: 0 }}
+                      whileHover={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <motion.p 
+                        className="text-white font-serif text-base md:text-xl lg:text-2xl"
+                        animate={{ letterSpacing: [0, 2, 0] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        {artwork.title}
+                      </motion.p>
+                    </motion.div>
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </>
           ) : (
             <motion.div
@@ -288,16 +468,26 @@ export function Home() {
               </div>
             </motion.div>
           )}
+
+          <Link to="/gallery">
+            <motion.button
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ x: 8 }}
+              transition={{ duration: 0.3 }}
+              className="mt-8 md:mt-12 flex items-center gap-2 text-white border-b-2 border-accent pb-2 text-sm md:text-lg hover:text-accent transition-colors"
+            >
+              Explore the Prints
+              <motion.span
+                animate={{ x: [0, 4, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                →
+              </motion.span>
+            </motion.button>
+          </Link>
         </div>
-        <Link to="/gallery">
-          <motion.button
-            whileHover={{ x: 5 }}
-            className="mt-8 md:mt-12 flex items-center gap-2 text-white border-b-2 border-accent pb-2 text-sm md:text-lg"
-          >
-            Explore the Prints
-            <span>→</span>
-          </motion.button>
-        </Link>
       </section>
 
       {/* Films Section */}
@@ -306,66 +496,141 @@ export function Home() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="mb-8 md:mb-16"
         >
-          <h2 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-4 md:mb-6 tracking-tight leading-tight">
-            {/* <span className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl opacity-60">Two</span> */}
-            <br />
-            <em className="italic">Films</em>
-          </h2>
-          <p className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed">
+          <motion.h2 
+            className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-4 md:mb-6 tracking-tight leading-tight"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.1 }}
+          >
+            <motion.em 
+              className="italic text-[#694633]"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2 }}
+            >
+              Films
+            </motion.em>
+          </motion.h2>
+          <motion.p 
+            className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.2 }}
+          >
             Cinematic journeys weaving fragmented narratives, layered voices, and the poetry of displacement.
-          </p>
+          </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ staggerChildren: 0.2, delayChildren: 0.1 }}
+        >
           {previewFilms.map((film, index) => (
             <Link key={film.id} to={`/films#film-${film.id}`}>
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
+                transition={{ duration: 0.7, delay: index * 0.2, ease: "easeOut" }}
+                whileHover={{ y: -10 }}
                 className="group cursor-pointer"
               >
-                <div className="aspect-[16/9] relative overflow-hidden mb-4 md:mb-6">
+                <motion.div
+                  className="aspect-[16/9] relative overflow-hidden mb-4 md:mb-6 rounded-sm"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.5 }}
+                >
                   <ImageWithFallback
                     src={film.image}
                     alt={film.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                   />
                   
-                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300" />
+                  <motion.div 
+                    className="absolute inset-0 bg-black/40 group-hover:bg-black/20"
+                    initial={{ opacity: 0.4 }}
+                    whileHover={{ opacity: 0.2 }}
+                    transition={{ duration: 0.3 }}
+                  />
                   
                   <motion.div 
-                    className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    whileHover={{ scale: 1.1 }}
+                    className="absolute inset-0 flex items-center justify-center"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileHover={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    <div className="w-16 h-16 rounded-full border-2 border-white flex items-center justify-center backdrop-blur-sm">
-                      <div className="w-0 h-0 border-l-[16px] border-l-white border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent ml-1" />
-                    </div>
+                    <motion.div 
+                      className="w-16 h-16 rounded-full border-2 border-white flex items-center justify-center backdrop-blur-sm bg-white/10"
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      <motion.div 
+                        className="w-0 h-0 border-l-[16px] border-l-white border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent ml-1"
+                        animate={{ x: [0, 2, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      />
+                    </motion.div>
                   </motion.div>
                   
-                  <div className="absolute top-4 md:top-6 right-4 md:right-6 bg-white/10 backdrop-blur-sm px-3 py-1 md:px-4 md:py-2 text-white text-xs md:text-sm border border-white/20">
+                  <motion.div 
+                    className="absolute top-4 md:top-6 right-4 md:right-6 bg-white/10 backdrop-blur-sm px-3 py-1 md:px-4 md:py-2 text-white text-xs md:text-sm border border-white/20 rounded-full"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                  >
                     {film.duration}
-                  </div>
-                </div>
+                  </motion.div>
+                </motion.div>
                 
-                <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-2 md:mb-3 leading-tight group-hover:text-accent transition-colors">{film.title}</h3>
-                <p className="text-muted-foreground text-sm sm:text-base md:text-lg leading-relaxed">{film.description}</p>
+                <motion.h3 
+                  className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-2 md:mb-3 leading-tight group-hover:text-[#694633] transition-colors"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  {film.title}
+                </motion.h3>
+                <motion.p 
+                  className="text-muted-foreground text-sm sm:text-base md:text-lg leading-relaxed"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                >
+                  {film.description}
+                </motion.p>
               </motion.div>
             </Link>
           ))}
-        </div>
+        </motion.div>
 
         <Link to="/films">
           <motion.button
-            whileHover={{ x: 5 }}
-            className="mt-8 md:mt-12 flex items-center gap-2 text-accent border-b-2 border-accent pb-2 text-sm md:text-lg"
+            initial={{ opacity: 0, x: -10 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ x: 8 }}
+            transition={{ duration: 0.3 }}
+            className="mt-8 md:mt-12 flex items-center gap-2 text-[#694633] border-b-2 border-[#694633] pb-2 text-sm md:text-lg hover:text-[#694633] transition-colors"
           >
             Explore the Films
-            <span>→</span>
+            <motion.span
+              animate={{ x: [0, 4, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              →
+            </motion.span>
           </motion.button>
         </Link>
       </section>
@@ -377,52 +642,109 @@ export function Home() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="mb-12 md:mb-16"
           >
-            <h2 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-4 md:mb-6 tracking-tight">
-              <em className="italic text-5xl sm:text-6xl md:text-8xl lg:text-9xl">Artifacts</em>
-            </h2>
-            <p className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed">
+            <motion.h2 
+              className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-4 md:mb-6 tracking-tight"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.1 }}
+            >
+              <motion.em 
+                className="italic text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-[#694633]"
+                initial={{ opacity: 0, y: 30 }}
+                 style={{ color: "#08172f" }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.2 }}
+              >
+                Artifacts
+              </motion.em>
+            </motion.h2>
+            <motion.p 
+              className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2 }}
+            >
               Objects that extend the exhibition beyond gallery walls. Each piece carries memory forward.
-            </p>
+            </motion.p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ staggerChildren: 0.08, delayChildren: 0.15 }}
+          >
             {previewProducts.map((product, index) => (
               <Link key={product.id} to={`/products#product-${product.id}`}>
                 <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ 
+                    duration: 0.6, 
+                    delay: index * 0.08,
+                    ease: "easeOut"
+                  }}
+                  whileHover={{ y: -8, scale: 1.05 }}
                   className="group cursor-pointer"
                 >
                   <motion.div 
-                    className="aspect-square bg-white mb-3 md:mb-4 overflow-hidden shadow-lg"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
+                    className="aspect-square bg-white mb-3 md:mb-4 overflow-hidden shadow-lg rounded-sm"
+                    whileHover={{ scale: 1.08 }}
+                    transition={{ duration: 0.5 }}
                   >
                     <ImageWithFallback
                       src={product.image}
                       alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-125 transition-transform duration-700 ease-out"
                     />
                   </motion.div>
-                  <h4 className="mb-1 text-sm md:text-base lg:text-lg font-serif group-hover:text-accent transition-colors">{product.name}</h4>
-                  <p className="text-xs md:text-sm text-muted-foreground line-clamp-2">{product.description}</p>
+                  <motion.h4 
+                    className="mb-1 text-sm md:text-base lg:text-lg font-serif group-hover:text-[#694633] transition-colors"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                  >
+                    {product.name}
+                  </motion.h4>
+                  <motion.p 
+                    className="text-xs md:text-sm text-muted-foreground line-clamp-2"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.15 }}
+                  >
+                    {product.description}
+                  </motion.p>
                 </motion.div>
               </Link>
             ))}
-          </div>
+          </motion.div>
 
           <Link to="/products">
             <motion.button
-              whileHover={{ x: 5 }}
-              className="mt-8 md:mt-12 flex items-center gap-2 text-accent border-b-2 border-accent pb-2 text-sm md:text-lg"
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ x: 8 }}
+              transition={{ duration: 0.3 }}
+              className="mt-8 md:mt-12 flex items-center gap-2 text-[#694633] border-b-2 border-[#694633] pb-2 text-sm md:text-lg hover:text-[#694633] transition-colors"
             >
               View All Artifacts
-              <span>→</span>
+              <motion.span
+                animate={{ x: [0, 4, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                →
+              </motion.span>
             </motion.button>
           </Link>
         </div>
@@ -434,48 +756,98 @@ export function Home() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-4xl"
         >
-          <h2 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-8 md:mb-12 tracking-tight leading-tight">
+          <motion.h2 
+            className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-8 md:mb-12 tracking-tight leading-tight"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.1 }}
+          >
             The
             <br />
-            <em className="italic text-5xl sm:text-6xl md:text-8xl lg:text-9xl">Voyage</em>
-          </h2>
+            <motion.em 
+              className="italic text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-[#694633]"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2 }}
+            >
+              Voyage
+            </motion.em>
+          </motion.h2>
           
-          <p className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed mb-8 md:mb-12">
-            This exhibition <em className="font-serif not-italic">moves</em>. It <em className="font-serif not-italic">transforms</em>.
+          <motion.p 
+            className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed mb-8 md:mb-12"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.2 }}
+          >
+            This exhibition <em className="font-serif not-italic text-foreground">moves</em>. It <em className="font-serif not-italic text-foreground">transforms</em>.
             It adapts to each city it inhabits, creating new dialogues between place, memory, and the communities that hold them.
-          </p>
+          </motion.p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ staggerChildren: 0.1, delayChildren: 0.15 }}
+          >
             {cityNames.map((city, index) => (
               <motion.div
                 key={city}
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="py-4 md:py-6 border-b-2 border-foreground/10 cursor-pointer hover:border-foreground/30 transition-colors group"
+                transition={{ 
+                  duration: 0.6, 
+                  delay: index * 0.1,
+                  ease: "easeOut"
+                }}
+                whileHover={{ x: 10, scale: 1.02 }}
+                className="py-4 md:py-6 border-b-2 border-foreground/10 cursor-pointer hover:border-foreground/30 transition-all group"
               >
-                <span className="text-xs md:text-sm text-muted-foreground uppercase tracking-widest">
+                <motion.span 
+                  className="text-xs md:text-sm text-muted-foreground uppercase tracking-widest"
+                  animate={{ opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
                   Chapter {index + 1}
-                </span>
+                </motion.span>
                 
-                <h3 className="text-2xl sm:text-3xl font-serif mt-2 group-hover:text-accent transition-colors">
+                <motion.h3 
+                  className="text-2xl sm:text-3xl font-serif mt-2 group-hover:text-[#694633] transition-colors"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                >
                   {city}
-                </h3>
+                </motion.h3>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           <Link to="/voyage">
             <motion.button
-              whileHover={{ x: 5 }}
-              className="flex items-center gap-2 text-accent border-b-2 border-accent pb-2 text-sm md:text-lg"
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ x: 8 }}
+              transition={{ duration: 0.3 }}
+              className="flex items-center gap-2 text-[#694633] border-b-2 border-[#694633] pb-2 text-sm md:text-lg hover:text-[#694633] transition-colors"
             >
               Explore All Locations
-              <span>→</span>
+              <motion.span
+                animate={{ x: [0, 4, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                →
+              </motion.span>
             </motion.button>
           </Link>
         </motion.div>
