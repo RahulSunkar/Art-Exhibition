@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { MapPin, Calendar } from 'lucide-react';
-import poster from '../data/EventData/AVTP_Invite_ND_003 (1).jpg'
+import poster from '../data/EventData/poster_page-0001.jpg'
 
 export function Voyage() {
   const locations = [
