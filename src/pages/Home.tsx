@@ -397,7 +397,7 @@ export function Home() {
                     <ImageWithFallback
                       src={artwork.image}
                       alt={artwork.title}
-                      className="w-full h-full object-cover  transition-all duration-700"
+                      className="w-full h-full object-cover transition-all duration-700"
                     />
                     
                     {/* Animated overlay */}
