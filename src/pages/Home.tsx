@@ -213,8 +213,6 @@ export function Home() {
             
             {hasArtworkData ? (
               <p className="text-white/60 text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed">
-                A collection of <span className="text-white font-serif text-xl md:text-2xl">1000+</span> artworks
-                exploring experimental techniques, human stories, and the visible traces of invisible lives.
               </p>
             ) : (
               <p className="text-white/60 text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed">
@@ -291,6 +289,15 @@ export function Home() {
             </motion.div>
           )}
         </div>
+        <Link to="/gallery">
+          <motion.button
+            whileHover={{ x: 5 }}
+            className="mt-8 md:mt-12 flex items-center gap-2 text-white border-b-2 border-accent pb-2 text-sm md:text-lg"
+          >
+            Explore the Prints
+            <span>→</span>
+          </motion.button>
+        </Link>
       </section>
 
       {/* Films Section */}

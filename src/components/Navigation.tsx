@@ -11,7 +11,7 @@ export function Navigation() {
     { path: '/', label: 'Home' },
     // { path: '/about', label: 'About' },
     { path: '/voyage', label: 'The Voyage' },
-    // { path: '/gallery', label: 'Art & Photography' },
+    { path: '/gallery', label: 'Alternative Prints' },
     { path: '/films', label: 'Films' },
     { path: '/people', label: 'People & Voices' },
     { path: '/products', label: 'Artifacts' },
