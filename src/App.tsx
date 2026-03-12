@@ -14,6 +14,7 @@ const Films = lazy(() => import('./pages/Films').then(m => ({ default: m.Films }
 const People = lazy(() => import('./pages/People').then(m => ({ default: m.People })));
 const Products = lazy(() => import('./pages/Products').then(m => ({ default: m.Products })));
 const Contact = lazy(() => import('./pages/Contact').then(m => ({ default: m.Contact })));
+const Media = lazy(() => import('./pages/Media').then(m => ({ default: m.Media })));
 
 // Loading fallback component
 function PageLoader() {
@@ -45,6 +46,7 @@ function AppContent() {
             <Route path="/people" element={<People />} />
             <Route path="/products" element={<Products />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/media" element={<Media />} />
           </Routes>
         </Suspense>
       </AnimatePresence>

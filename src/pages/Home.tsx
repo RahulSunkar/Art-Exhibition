@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import { Link } from 'react-router';
 import { useState, useRef, useEffect } from 'react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
-import { artworks, films, products, locations, videos } from '../data/store';
+import { artworks, films, products, locations} from '../data/store';
 import hero_video from '../data/hero_video.mp4';
 import hero_image from '../data/Dhushor_Stills__2.8.1.jpg';
 
@@ -27,7 +27,7 @@ function BlurImage({ src, alt, className }: { src: string; alt: string; classNam
         src={src}
         alt={alt}
         className={`${className} absolute inset-0`}
-        onLoadingComplete={() => setIsLoading(false)}
+        // onLoadingComplete={() => setIsLoading(false)}
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoading ? 0 : 1 }}
         transition={{ duration: 0.5 }}
@@ -849,6 +849,10 @@ export function Home() {
                 →
               </motion.span>
             </motion.button>
+          </Link>
+          {/* entry into media page */}
+          <Link to="/media" className="mt-4 inline-block text-sm text-accent underline">
+            Visit media page
           </Link>
         </motion.div>
       </section>

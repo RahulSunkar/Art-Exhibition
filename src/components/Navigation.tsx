@@ -15,6 +15,7 @@ export function Navigation() {
     { path: '/films', label: 'Films' },
     { path: '/people', label: 'People & Voices' },
     { path: '/products', label: 'Artifacts' },
+    { path: '/media', label: 'Media' },
     { path: '/contact', label: 'Contact' },
   ];
 
