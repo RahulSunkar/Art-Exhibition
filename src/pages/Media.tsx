@@ -646,27 +646,6 @@ export function Media() {
             <PressTile key={item.id} item={item} index={i} />
           ))}
         </div>
-
-        {/* ── GALLERY ── */}
-        {/* <div className="sec-head">
-          <span className="sec-eyebrow">Exhibition &amp; Film</span>
-          <div className="sec-rule" />
-        </div>
-        <h2 className="sec-title">Gallery</h2>
-
-        <div className="gallery-grid">
-          {galleryImages.map((img, i) => (
-            <GalleryThumb key={img.id} image={img} index={i} onClick={() => openLightbox(i)} />
-          ))}
-        </div> */}
-
-        {/* ── FOOTER ── */}
-        <div className="media-footer">
-          <Link to="/" className="back-link">← Back to Home</Link>
-          <a href="https://bit.ly/32XEfFE" target="_blank" rel="noopener noreferrer" className="mint-cta">
-            Download Mint App →
-          </a>
-        </div>
       </div>
 
       {lightboxIndex !== null && (
