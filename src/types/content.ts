@@ -96,4 +96,16 @@ export interface Event {
   location: string;
   date: string;
   type: 'Exhibition' | 'Talk' | 'Screening' | 'Workshop' | 'Opening';
+  subtitle?: string;
+  summary?: string;
+  keyHighlights?: string[];
+  performances?: {
+    title: string;
+    description: string;
+    artist: string;
+  }[];
+  curatorNote?: string;
+  eventBites?: string[];
+  chiefGuests?: Array<{ name: string; role: string; details?: string }>;
+  relatedPages?: Array<{ label: string; path: string }>;
 }

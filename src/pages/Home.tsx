@@ -1,11 +1,12 @@
 import { motion, useScroll, useTransform } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useState, useRef, useEffect } from 'react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
-import { artworks, films, products, locations } from '../data/store';
+import { artworks, films, products, locations, events } from '../data/store';
 import hero_video from '../data/hero_video.mp4';
 import hero_image from '../data/Dhushor_Stills__2.8.1.jpg';
+
 
 // ─── Press data (mirrored from Media page) ───────────────
 const pressItems = [
@@ -72,9 +73,11 @@ export function Home() {
   const scale    = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
   const y        = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
 
+  const navigate = useNavigate();
   const previewArtworks = artworks.slice(0, 6);
   const previewFilms    = films.slice(0, 2);
   const previewProducts = products.slice(0, 4);
+  const nextEvent       = events.find((event) => event.type === 'Exhibition') ?? events[0];
   const cityNames       = locations.map(loc => loc.city);
   const hasArtworkData  = previewArtworks.length > 0;
 
@@ -180,7 +183,355 @@ export function Home() {
           </motion.div>
         </div>
       </section>
+      {/* ══════════════════════════════════════════════════════════
+              EVENT SECTION
+          ══════════════════════════════════════════════════════════ */}
+       {/* ══════════════════════════════════════════════════════════
+    EVENT SECTION — fully dark, matches site theme
+══════════════════════════════════════════════════════════ */}
+<section
+  style={{ background: '#0C0B09', position: 'relative', overflow: 'hidden' }}
+  className="py-24 md:py-36 lg:py-48"
+>
 
+  {/* ── Ambient glow ── */}
+  <div
+    className="pointer-events-none absolute inset-0"
+    style={{
+      background:
+        'radial-gradient(ellipse 60% 50% at 75% 20%, rgba(105,70,51,0.10) 0%, transparent 70%), ' +
+        'radial-gradient(ellipse 40% 55% at 15% 85%, rgba(105,70,51,0.06) 0%, transparent 60%)',
+    }}
+  />
+
+  {/* ── Decorative left vertical rule ── */}
+  <motion.div
+    style={{
+      position: 'absolute',
+      left: 'clamp(1rem, 4vw, 4rem)',
+      top: 0,
+      bottom: 0,
+      width: 1,
+      background: 'linear-gradient(to bottom, transparent, rgba(105,70,51,0.35) 25%, rgba(105,70,51,0.35) 75%, transparent)',
+    }}
+    initial={{ scaleY: 0 }}
+    whileInView={{ scaleY: 1 }}
+    viewport={{ once: true }}
+    transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+  />
+
+  <div
+    className="relative z-10"
+    style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(1.5rem, 6vw, 5rem)' }}
+  >
+
+    {/* ── Eyebrow label ── */}
+    <motion.p
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7 }}
+      style={{
+        fontFamily: "'Poppins', sans-serif",
+        fontSize: 10,
+        fontWeight: 600,
+        letterSpacing: '0.35em',
+        textTransform: 'uppercase',
+        color: 'rgba(255,255,255,0.22)',
+        marginBottom: '2.5rem',
+      }}
+    >
+      Current Exhibition
+    </motion.p>
+
+    {/* ── Title + meta row ── */}
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        gap: '2.5rem',
+        marginBottom: '4rem',
+      }}
+    >
+      {/* Title */}
+      <motion.h2
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        className="font-serif"
+        style={{
+          fontSize: 'clamp(3rem, 8vw, 7rem)',
+          color: '#ffffff',
+          lineHeight: 1,
+          letterSpacing: '-0.02em',
+          fontWeight: 600,
+        }}
+      >
+        {nextEvent?.title ?? 'Untitled Event'}
+      </motion.h2>
+
+      {/* Summary */}
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.12 }}
+        style={{
+          fontFamily: "'Poppins', sans-serif",
+          fontSize: 'clamp(0.9rem, 1.5vw, 1.15rem)',
+          fontWeight: 300,
+          lineHeight: 1.75,
+          color: 'rgba(255,255,255,0.4)',
+          maxWidth: '640px',
+        }}
+      >
+        {nextEvent?.summary ?? 'Join us to experience the latest chapter in our exhibition journey.'}
+      </motion.p>
+
+      {/* Meta pills — horizontal row */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7, delay: 0.2 }}
+        style={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}
+      >
+        {[
+          { label: 'Location', value: nextEvent?.location },
+          { label: 'Date',     value: nextEvent?.date },
+          { label: 'Type',     value: nextEvent?.type },
+        ]
+          .filter((m) => m.value)
+          .map((meta, i) => (
+            <div
+              key={i}
+              style={{
+                background: '#181510',
+                border: '1px solid rgba(105,70,51,0.22)',
+                padding: '14px 24px',
+                minWidth: 180,
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: 9,
+                  fontWeight: 700,
+                  letterSpacing: '0.28em',
+                  textTransform: 'uppercase',
+                  color: '#694633',
+                  marginBottom: 6,
+                }}
+              >
+                {meta.label}
+              </p>
+              <p
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: 13,
+                  fontWeight: 300,
+                  color: 'rgba(255,255,255,0.6)',
+                }}
+              >
+                {meta.value}
+              </p>
+            </div>
+          ))}
+      </motion.div>
+    </div>
+
+    {/* ── Highlights ── */}
+    {nextEvent?.keyHighlights && nextEvent.keyHighlights.length > 0 && (
+      <div style={{ marginBottom: '5rem' }}>
+
+        {/* Sub-label */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: 9,
+            fontWeight: 700,
+            letterSpacing: '0.32em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.18)',
+            marginBottom: '1.25rem',
+          }}
+        >
+          Highlights
+        </motion.p>
+
+        {/* Highlight grid — 1px gap, dark tiles */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+            gap: 2,
+          }}
+        >
+          {nextEvent.keyHighlights.map((highlight, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+              whileHover="hovered"
+              style={{ position: 'relative', overflow: 'hidden', background: '#181510' }}
+            >
+              {/* Hover brown fill from bottom */}
+              <motion.div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'rgba(105,70,51,0.12)',
+                  transformOrigin: 'bottom',
+                  zIndex: 0,
+                }}
+                initial={{ scaleY: 0 }}
+                variants={{ hovered: { scaleY: 1 } }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              />
+
+              <div style={{ position: 'relative', zIndex: 1, padding: '2rem 2rem 2.5rem' }}>
+                {/* Large muted number */}
+                <p
+                  className="font-serif"
+                  style={{
+                    fontSize: 'clamp(2.2rem, 3.5vw, 3.2rem)',
+                    color: 'rgb(251, 251, 251)',
+                    lineHeight: 1,
+                    marginBottom: '1.25rem',
+                    fontWeight: 600,
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  {String(index + 1).padStart(2, '0')}
+                </p>
+
+                {/* Divider */}
+                <motion.div
+                  style={{ height: 1, background: 'rgba(255,255,255,0.05)', marginBottom: '1.25rem' }}
+                  variants={{ hovered: { background: 'rgba(105,70,51,0.3)' } }}
+                  transition={{ duration: 0.3 }}
+                />
+
+                {/* Highlight text */}
+                <p
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: 13,
+                    lineHeight: 1.75,
+                    fontWeight: 300,
+                    color: 'rgba(255,255,255,0.5)',
+                  }}
+                >
+                  {highlight}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* ── CTA row ── */}
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7, delay: 0.15 }}
+      style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '2px' }}
+    >
+      {/* Ghost CTA — brown border, fills on hover */}
+      <Link to="/events">
+        <motion.div
+          style={{
+            position: 'relative',
+            overflow: 'hidden',
+            border: '1px solid rgba(206, 80, 12, 0.4)',
+            padding: '16px 36px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 10,
+            cursor: 'pointer',
+          }}
+          whileHover="hovered"
+        >
+          <motion.div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: '#844523',
+              transformOrigin: 'bottom',
+              zIndex: 0,
+            }}
+            initial={{ scaleY: 0 }}
+            variants={{ hovered: { scaleY: 1 } }}
+            transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+          />
+          <motion.span
+            style={{
+              position: 'relative',
+              zIndex: 1,
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: 'rgba(255,255,255,0.55)',
+            }}
+            variants={{ hovered: { color: '#ffffff' } }}
+            transition={{ duration: 0.2 }}
+          >
+            Explore Event Story
+          </motion.span>
+          <motion.span
+            style={{ position: 'relative', zIndex: 1, color: '#694633', fontSize: 14 }}
+            variants={{ hovered: { color: '#ffffff', x: 4 } }}
+            transition={{ duration: 0.2 }}
+          >
+            →
+          </motion.span>
+        </motion.div>
+      </Link>
+
+      {/* Solid white CTA */}
+      <Link to="/events">
+        <motion.div
+          style={{
+            background: '#ffffff',
+            padding: '16px 36px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 10,
+            cursor: 'pointer',
+          }}
+          whileHover={{ backgroundColor: 'rgba(255,255,255,0.88)' }}
+          transition={{ duration: 0.2 }}
+        >
+          <span
+            style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: '#0C0B09',
+            }}
+          >
+            Go to Event Page
+          </span>
+        </motion.div>
+      </Link>
+    </motion.div>
+
+  </div>
+</section>
+    
       {/* ── ART PREVIEW GRID ─────────────────────────────────── */}
       <section className="py-16 md:py-24 lg:py-32 px-4 md:px-6 lg:px-12 bg-black text-white">
         <div className="max-w-screen-2xl mx-auto">
@@ -545,7 +896,7 @@ export function Home() {
               Featured across{' '}
               <span style={{ color: 'rgba(255,255,255,0.7)' }}>7 major outlets</span>{' '}
               reaching over{' '}
-              <span style={{ color: 'rgba(255,255,255,0.7)' }}>1 million readers</span>.
+              <span style={{ color: 'rgba(255,255,255,0.7)' }}>50+ million readers</span>.
             </p>
             <Link to="/media">
               <motion.div

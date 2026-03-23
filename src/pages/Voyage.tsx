@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import { motion } from 'motion/react';
 import { MapPin, Calendar } from 'lucide-react';
 import poster from '../data/EventData/poster_page-0001.jpg'
@@ -157,21 +158,15 @@ export function Voyage() {
           transition={{ duration: 0.8 }}
           className="mt-32 pt-20 border-t border-foreground/10"
         >
-          {/* <h2 className="font-serif text-4xl md:text-5xl mb-8 tracking-tight">
-            Bring the Exhibition to Your City
-          </h2> */}
-          {/* <p className="text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed">
-            A Voyage to Permanence is designed to adapt and transform. We work with local
-            communities, artists, and institutions to create unique iterations that
-            respond to each city's specific histories and contexts.
-          </p> */}
-          {/* <motion.a
-            href="/contact"
-            whileHover={{ x: 10 }}
-            className="inline-flex items-center gap-2 text-accent border-b border-accent pb-1"
-          >
-            Contact Us About Hosting
-          </motion.a> */}
+          <h2 className="font-serif text-4xl md:text-5xl mb-8 tracking-tight">
+            Continue the Journey
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed">
+            Rediscover the latest event in the series and dive into the full story of performances, curator reflections, and press coverage.
+          </p>
+          <Link to="/events" className="inline-flex items-center gap-2 px-5 py-3 rounded-md border border-white/20 bg-white/10 text-white hover:bg-white/20 transition">
+            Explore Recent Exhibition
+          </Link>
         </motion.section>
       </div>
     </div>

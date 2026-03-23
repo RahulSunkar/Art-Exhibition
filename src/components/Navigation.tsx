@@ -10,6 +10,7 @@ export function Navigation() {
   const links = [
     { path: '/', label: 'Home' },
     // { path: '/about', label: 'About' },
+    { path: '/events', label: 'Events' },
     { path: '/voyage', label: 'The Voyage' },
     { path: '/gallery', label: 'Alternative Prints' },
     { path: '/films', label: 'Films' },

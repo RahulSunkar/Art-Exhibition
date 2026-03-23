@@ -15,6 +15,7 @@ const People = lazy(() => import('./pages/People').then(m => ({ default: m.Peopl
 const Products = lazy(() => import('./pages/Products').then(m => ({ default: m.Products })));
 const Contact = lazy(() => import('./pages/Contact').then(m => ({ default: m.Contact })));
 const Media = lazy(() => import('./pages/Media').then(m => ({ default: m.Media })));
+const Events = lazy(() => import('./pages/Events').then(m => ({ default: m.Events })));
 
 // Loading fallback component
 function PageLoader() {
@@ -43,6 +44,7 @@ function AppContent() {
             <Route path="/voyage" element={<Voyage />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/films" element={<Films />} />
+            <Route path="/events" element={<Events />} />
             <Route path="/people" element={<People />} />
             <Route path="/products" element={<Products />} />
             <Route path="/contact" element={<Contact />} />
