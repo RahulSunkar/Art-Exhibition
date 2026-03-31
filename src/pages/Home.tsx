@@ -602,9 +602,9 @@ export function Home() {
                   {/* Divider + excerpt */}
                   <div>
                     <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', marginBottom: '1rem' }} />
-                    <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 12, fontWeight: 300, color: 'rgba(255,255,255,0.4)', lineHeight: 1.7, fontStyle: 'italic' }}>
+                    {/* <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 12, fontWeight: 300, color: 'rgba(255,255,255,0.4)', lineHeight: 1.7, fontStyle: 'italic' }}>
                       "{item.excerpt.length > 90 ? item.excerpt.slice(0, 90) + '…' : item.excerpt}"
-                    </p>
+                    </p> */}
                   </div>
                 </motion.div>
               ))}

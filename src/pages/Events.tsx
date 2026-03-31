@@ -213,7 +213,7 @@ export function Events() {
       </motion.div>
 
       {/* ── KEY HIGHLIGHTS ───────────────────────────── */}
-      {nextEvent?.keyHighlights?.length > 0 && (
+      {(nextEvent?.keyHighlights ?? []).length > 0 && (
         <div style={{ padding: '6rem 4rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           <motion.p
             className="label-mono"
@@ -232,7 +232,7 @@ export function Events() {
             gap: 1,
             background: 'rgba(255,255,255,0.05)',
           }}>
-            {nextEvent.keyHighlights.map((highlight, index) => (
+            {nextEvent.keyHighlights!.map((highlight, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: index % 2 === 0 ? 60 : -60 }}
@@ -274,7 +274,7 @@ export function Events() {
       )}
 
       {/* ── PERFORMANCES ─────────────────────────────── */}
-      {nextEvent?.performances?.length > 0 && (
+      {(nextEvent?.performances ?? []).length > 0 && (
         <div style={{ padding: '6rem 4rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '3rem' }}>
             <motion.p
