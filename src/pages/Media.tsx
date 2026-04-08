@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { useEffect, useState, useRef, useCallback } from 'react';
-import Image1 from '../data/EventData/heroImg.png';
-import Image2 from '../data/EventData/WhatsApp Image 2026-03-12 at 17.45.00.jpeg';
+import Image1 from '../data/EventData/20260310_182202.jpg';
+import Image2 from '../data/EventData/poster_page-0001.jpg';
 import Image3 from '../data/Prints/_MG_7058.jpg';
 import Image4 from '../data/Prints/_MG_7061.jpg';
 import Image5 from '../data/Prints/_MG_7064.jpg';

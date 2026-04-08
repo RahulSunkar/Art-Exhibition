@@ -152,7 +152,7 @@ export function Products() {
 
   const toteBagsCollection = {
     id: 'tote-bags',
-    title: 'Exhibition Tote Bags',
+    title: 'Limited Edition Tote Bags',
     subtitle: '',
     description: '',
     icon: ShoppingBag,

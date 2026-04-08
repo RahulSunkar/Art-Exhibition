@@ -98,14 +98,61 @@ export interface Event {
   type: 'Exhibition' | 'Talk' | 'Screening' | 'Workshop' | 'Opening';
   subtitle?: string;
   summary?: string;
-  keyHighlights?: string[];
+  bgVideo?: string;
+  keyHighlights?: Array<{
+    title: string;
+    description: string;
+    image?: string;
+    videoUrl?: string;
+  }>;
   performances?: {
     title: string;
     description: string;
     artist: string;
   }[];
   curatorNote?: string;
+  curatorVideo?: string;
   eventBites?: string[];
   chiefGuests?: Array<{ name: string; role: string; details?: string }>;
+  setup?: {
+    title: string;
+    description: string;
+    image: string;
+  };
+  catalog?: {
+    title: string;
+    description: string;
+    image: string;
+    pdfUrl?: string;
+    items?: Array<{ name: string; details: string }>;
+  };
+  walkthroughs?: Array<{
+    title: string;
+    description: string;
+    image: string;
+    notes?: string;
+  }>;
+  performanceVideos?: Array<{
+    title: string;
+    description: string;
+    videoUrl: string;
+    artist?: string;
+  }>;
+  voiceOfAudience?: Array<{
+    title?: string;
+    videoUrl: string;
+  }>;
+  installNotes?: Array<{
+    title: string;
+    content: string;
+    image?: string;
+  }>;
+  reviewsAndPics?: Array<{
+    title: string;
+    author: string;
+    review: string;
+    image: string;
+    rating?: number;
+  }>;
   relatedPages?: Array<{ label: string; path: string }>;
 }

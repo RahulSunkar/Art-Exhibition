@@ -8,6 +8,12 @@ import type {
   ProcessStep,
   Event 
 } from '../types/content';
+
+//Hero Video
+import heroVideo from './hero_video.mp4';
+
+//Films Behind the scenes pics
+
 import TremorsPoster from './FilmsData/Tremor_Poster.jpg';
 import Termors_Still_1 from './FilmsData/Tremors_Still_1.jpg';
 import Termors_Still_2 from './FilmsData/Tremors_Still_2.jpg';
@@ -15,6 +21,7 @@ import Termors_Still_3 from './FilmsData/Tremors_Still_3.jpg';
 import Termors_Still_4 from './FilmsData/Tremors_Still_4.jpg';  
 import Termors_Still_5 from './FilmsData/Tremors_Still_5.jpg';
 import Termors_Still_6 from './FilmsData/Tremors_Still_6.jpg';
+
 import Dushor_Poster1 from './FilmsData/Dushor_Poster1.jpg';
 import Dushor_Poster2 from './FilmsData/Dushor_Poster2.jpg';
 import Dushor_Still_1 from './FilmsData/Dushor_Still_1.jpg';
@@ -23,11 +30,15 @@ import Dushor_Still_3 from './FilmsData/Dushor_Still_3.jpg';
 import Dushor_Still_4 from './FilmsData/Dushor_Still_4.jpg';
 import Dushor_Still_5 from './FilmsData/Dushor_Still_5.jpg';
 import Dushor_Still_6 from './FilmsData/Dushor_Still_6.jpg';
+
+
 import CoffeeTableBook_3 from './ArtifactData/Coffee Table book/AVTP_Square_Book_Mockup_3.jpg';
 import Totes from './ArtifactData/ToteBags/LIAB_Tote_Mockup02_001.jpg';
 import frams from './ArtifactData/Frames/fd1a2e559fdc66a9ddc161d73e583877_1.jpg';
 import NoteBooks from './ArtifactData/Note Books/Bangalore_FrontCOver_Mockup.jpg';
 import impressionOfmingling_Poster from './FilmsData/Impression_Of_mingling_Poster_01.jpg';
+
+
 import  Image1 from "./Prints/_MG_7051.jpg"
 import  Image2 from "./Prints/_MG_7054.jpg"
 import  Image3 from "./Prints/_MG_7058.jpg"
@@ -47,18 +58,34 @@ import  Image16 from "./Prints/_MG_7099.jpg"
 import  Image17 from "./Prints/_MG_7102.jpg"
 import  Image18 from "./Prints/_MG_7106.jpg"
 
+import LivePerformanceposter from './Prints/_MG_7058.jpg';
+
+
+
 // YouTube Trailer URLs
 const ImperssionOfMingling_Trailer = 'https://www.youtube.com/embed/nJjkydJAnUA';
 const Dushor_Trailer = 'https://www.youtube.com/embed/74fDOTXxVg4';
 const TremorsTrailer = 'https://www.youtube.com/embed/S0-et8N_FPM';
+const Dr_Boominathan_Performance = 'https://www.youtube.com/embed/BFuHZIS9E1Q';
+const curator_notes_video ='https://www.youtube.com/embed/SKI9xEtVZy4';
 
-// ============================================
+
+// Voice of audience videos
+const reviewVideo1 = 'https://www.youtube.com/embed/vG9vSY8I070';
+const reviewVideo2 = 'https://www.youtube.com/embed/BNDL0Uh0_0Y';
+const reviewVideo3 = 'https://www.youtube.com/embed/X8g7Wvck1iY';
+const reviewVideo4 = 'https://www.youtube.com/embed/07ECs6Hnvy0';
+const reviewVideo5 = 'https://www.youtube.com/embed/KXIixLTzmCs';
+
+
+
+
 // ARTWORKS - Add/Edit artworks here
-// ============================================
+
 export const artworks: Artwork[] = [
   {
     id: 1,
-    title: 'Displacement Series I',
+    title: '',
     artist: 'Collective Work',
     year: '2026',
     medium: 'Mixed Media Photography',
@@ -70,37 +97,37 @@ export const artworks: Artwork[] = [
   },
   {
     id: 2,
-    title: 'Invisible Portraits',
+    title: '',
     artist: 'Various Artists',
     year: '2026',
     medium: 'Documentary Photography',
     city: 'Delhi',
     theme: 'Identity',
-    image: Image2,
+    image: Image15 ,
     description: 'Portraits of individuals whose stories have been systematically erased from official narratives.',
     process: 'Shot on film with intentional grain to evoke analog memory and historical documentation.'
   },
   {
     id: 3,
-    title: 'Gallery as Archive',
+    title: '',
     artist: 'Installation',
     year: '2026',
     medium: 'Site-Specific Installation',
     city: 'Chennai',
     theme: 'Space',
-    image: Image3,
+    image: Image5,
     description: 'The gallery space itself becomes a living archive of absence and presence.',
     process: 'Architectural photography combined with projection mapping creates immersive spatial narratives.'
   },
   {
     id: 4,
-    title: 'Urban Vertices',
+    title: '',
     artist: 'Collective Work',
     year: '2026',
     medium: 'Street Photography',
     city: 'Delhi',
     theme: 'Place',
-    image: Image4,
+    image: Image17,
     description: 'Intersection points in the urban landscape where stories converge and diverge.',
     process: 'Long exposure night photography capturing movement and stillness simultaneously.'
   },
@@ -112,7 +139,7 @@ export const artworks: Artwork[] = [
     medium: 'Experimental Photography',
     city: 'Goa',
     theme: 'Memory',
-    image: Image5,
+    image: Image16,
     description: 'Time captured and fractured through experimental photographic processes.',
     process: 'Multiple exposures over time create palimpsests of memory—overlapping moments that coexist.'
   },
@@ -136,7 +163,7 @@ export const artworks: Artwork[] = [
     medium: 'Photographic Collage',
     city: 'Chennai',
     theme: 'Place',
-    image: Image7,
+    image: Image17,
     description: 'Cartographies of places that exist only in memory and imagination.',
     process: 'Collage of photographs, maps, and personal documents creates layered geographical narratives.'
   },
@@ -610,43 +637,69 @@ export const productProcess: ProcessStep[] = [
 export const events: Event[] = [
   {
     id: 1,
-    title: 'Delhi Exhibition',
-    subtitle: 'A Voyage to Permanence – Closing Ceremony',
-    location: 'Indian Heritage Centre , Delhi',
-    date: 'March 2-14, 2026',
-    type: 'Exhibition',
-    summary:
-      'An immersive retrospective of the exhibition journey, featuring site-specific installations, live performances, and a deep-dive conversation with collaborators and audience members.',
-    keyHighlights: [
-      'Launch by curators Pratik and Nandini',
-      'Live screening of “Impressions of Mingling” with Q&A',
-      'Audio-visual installation “Inheritance” by visiting artists',
-      'Community-led photowalk and response mapping',
-    ],
-    performances: [
+    location: 'India Habitat Centre , New Delhi',
+    title: 'Chapter One',
+    date: 'March 10-14, 2026',
+    bgVideo: heroVideo,
+    curatorNote: 'Total Note from the Curator about the event, the vision, the process, and what to expect. This note sets the tone for the exhibition and provides context for visitors.',
+    curatorVideo: curator_notes_video,
+    performanceVideos: [
       {
-        title: 'Mirror of Displacement',
-        artist: 'Kiran Kumar',
+        title: 'Live Performance: Dr. Boominathan',
         description: 'A live performance blending oral narrative, experimental sound, and looped visuals from the exhibition archive.',
+        videoUrl: Dr_Boominathan_Performance,
+      },
+    ],
+    voiceOfAudience: [
+      { videoUrl: reviewVideo1 },
+      { videoUrl: reviewVideo2 },
+      { videoUrl: reviewVideo3 },
+      { videoUrl: reviewVideo4 },
+      { videoUrl: reviewVideo5 },
+    ],
+    reviewsAndPics: [
+      {
+        title: 'A Powerful Journey',
+        author: 'Priya Sharma',
+        review: 'This exhibition challenged my perspective on memory and displacement. The curatorial approach and community engagement made it deeply personal and impactful.',
+        image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
+        rating: 5,
       },
       {
-        title: 'Echoes (Bhavya Ensemble)',
-        artist: 'Bhavya Ensemble',
-        description: 'A site-specific ambient performance built from field recordings captured during the Goa chapter.',
+        title: 'Voices That Matter',
+        author: 'Rajesh Kumar',
+        review: 'A remarkable documentation of stories that are often unheard. The experimental photography techniques bring these narratives to life in unexpected ways.',
+        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+        rating: 5,
       },
-    ],
-    curatorNote:
-      'This event is the culmination of two years of collaborative work across cities. We invited audiences to explore the ethics of witnessing, the ecology of making, and the meaning of permanence in movement.',
-    eventBites: [
-      'Opening day footfall: 1200 visitors',
-      'Dedicated engagement zone for artists and studied communities',
-      '12 live sessions including talks, screenings, and workshops',
-      'Feedback loops captured through digital and analogue response cards',
-    ],
-    chiefGuests: [
-      { name: 'Aarti Menon', role: 'Guest Curator', details: 'Delivered opening remarks on photographic ethics.' },
-      { name: 'Professor Ravi Bhattacharya', role: 'Guest Speaker', details: 'Led panel on displacement and visual archives.' },
-      { name: 'Anita Sharma', role: 'Community Artist', details: 'Presented “Fragments of Home”.' },
+      {
+        title: 'Emotional & Thoughtful',
+        author: 'Anjali Patel',
+        review: 'The exhibition stands out for its ethical approach to representation and community partnership. Each artwork carries weight and meaning beyond the visual.',
+        image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400',
+        rating: 5,
+      },
+      {
+        title: 'A Must-See Experience',
+        author: 'Vikram Singh',
+        review: 'The layering of stories, images, and sounds creates an immersive experience. It questions what we think we know about history and labor.',
+        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+        rating: 5,
+      },
+      {
+        title: 'Inspiring & Provocative',
+        author: 'Meera Desai',
+        review: 'An exhibition that asks difficult questions and provides space for reflection. The collaborative process is as important as the final artwork.',
+        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+        rating: 5,
+      },
+      {
+        title: 'Breaking Barriers',
+        author: 'Arjun Nair',
+        review: 'This showcase redefines what collaborative art can be. It gives agency to those whose stories are usually silenced. Truly transformative.',
+        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+        rating: 5,
+      },
     ],
     relatedPages: [
       { label: 'Films', path: '/films' },
@@ -654,33 +707,5 @@ export const events: Event[] = [
       { label: 'Contact (Feedback)', path: '/contact' },
       { label: 'Media', path: '/media' },
     ],
-  },
-  {
-    id: 2,
-    title: 'Goa Opening',
-    location: 'Sunaparanta Centre',
-    date: 'August 2026',
-    type: 'Opening',
-  },
-  {
-    id: 3,
-    title: 'Artist Talk',
-    location: 'Project 88 Delhi',
-    date: 'May 15',
-    type: 'Talk',
-  },
-  {
-    id: 4,
-    title: 'Film Screening',
-    location: 'The Invisible Thread',
-    date: 'June 20',
-    type: 'Screening',
-  },
-  {
-    id: 5,
-    title: 'Workshop',
-    location: 'Collaborative Photography',
-    date: 'July 5',
-    type: 'Workshop',
-  },
+  }
 ];

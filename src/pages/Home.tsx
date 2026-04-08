@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
-import { Link, useNavigate } from 'react-router';
-import { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router';
+import { useRef, useEffect } from 'react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { artworks, films, products, locations, events } from '../data/store';
 import hero_video from '../data/hero_video.mp4';
@@ -79,7 +79,7 @@ export function Home() {
       {/* ────────── HERO ───────────────────────── */}
       <section ref={containerRef} className="relative h-screen flex items-center justify-center overflow-hidden">
         <motion.video
-          style={{ opacity, scale, filter: 'brightness(0.6) grayscale(1)' }}
+          style={{ opacity, scale }}
           autoPlay muted loop playsInline
           className="absolute inset-0 w-full h-full object-cover"
         >
@@ -138,28 +138,19 @@ export function Home() {
       </section>
 
       {/* ══════════════════════════════════════════
-          EVENT SECTION — BLACK
+          EVENT SECTION — LIGHT GREY
        ══════════════════════════════════════════ */}
-      <section style={{ background: '#0a0a0a', position: 'relative', overflow: 'hidden' }} className="py-24 md:py-36 lg:py-48">
-
-        {/* Left vertical rule */}
-        <motion.div
-          style={{
-            position: 'absolute', left: 'clamp(1rem, 4vw, 4rem)', top: 0, bottom: 0, width: 1,
-            background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.12) 25%, rgba(255,255,255,0.12) 75%, transparent)',
-          }}
-          initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} viewport={{ once: true }}
-          transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
-        />
-
+      <section style={{ background: '#f9f9f9', position: 'relative', overflow: 'hidden' }} className="py-24 md:py-36 lg:py-48">
         <div className="relative z-10" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(1.5rem, 6vw, 5rem)' }}>
 
-          {/* Title */}
+          {/* Title — Slide from left with rotation */}
           <motion.h2
-            initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, x: -80, rotateY: -15 }}
+            whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif"
-            style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', color: '#ffffff', lineHeight: 1, letterSpacing: '-0.02em', fontWeight: 600, marginBottom: '2.5rem' }}
+            style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', color: '#0a0a0a', lineHeight: 1, letterSpacing: '-0.02em', fontWeight: 600, marginBottom: '1.5rem' }}
           >
             {nextEvent?.title ?? 'Untitled Event'}
           </motion.h2>
@@ -168,74 +159,33 @@ export function Home() {
           <motion.div
             initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            style={{ display: 'flex', flexWrap: 'wrap', gap: 2, marginBottom: '4rem' }}
+            style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem', alignItems: 'center' }}
           >
             {[{ label: 'Location', value: nextEvent?.location }, { label: 'Date', value: nextEvent?.date }]
               .filter(m => m.value)
               .map((meta, i) => (
-                <div key={i} style={{ background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.1)', padding: '14px 24px', minWidth: 180 }}>
-                  <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>{meta.label}</p>
-                  <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 13, fontWeight: 300, color: 'rgba(255,255,255,0.8)' }}>{meta.value}</p>
+                <div key={i} style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)', padding: '14px 24px' }}>
+                  <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 9, fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 6 }}>{meta.label}</p>
+                  <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 13, fontWeight: 300, color: '#0a0a0a' }}>{meta.value}</p>
                 </div>
               ))}
-          </motion.div>
-
-          {/* Highlights */}
-          {nextEvent?.keyHighlights && nextEvent.keyHighlights.length > 0 && (
-            <div style={{ marginBottom: '5rem' }}>
-              <motion.p
-                initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-                style={{ fontFamily: "'Poppins', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: '0.32em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.18)', marginBottom: '1.25rem' }}
-              >
-                Highlights
-              </motion.p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 2 }}>
-                {nextEvent.keyHighlights.map((highlight, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
-                    whileHover="hovered"
-                    style={{ position: 'relative', overflow: 'hidden', background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.08)' }}
-                  >
-                    <motion.div style={{ position: 'absolute', inset: 0, background: '#ffffff', transformOrigin: 'bottom', zIndex: 0 }}
-                      initial={{ scaleY: 0 }} variants={{ hovered: { scaleY: 1 } }} transition={{ duration: 0.4 }} />
-                    <div style={{ position: 'relative', zIndex: 1, padding: '2rem 2rem 2.5rem' }}>
-                      <motion.p className="font-serif"
-                        style={{ fontSize: 'clamp(2.2rem, 3.5vw, 3.2rem)', color: '#ffffff', lineHeight: 1, marginBottom: '1.25rem', fontWeight: 600, letterSpacing: '-0.02em' }}
-                        variants={{ hovered: { color: '#0a0a0a' } }} transition={{ duration: 0.28 }}>
-                        {String(index + 1).padStart(2, '0')}
-                      </motion.p>
-                      <motion.div style={{ height: 1, background: 'rgba(255,255,255,0.1)', marginBottom: '1.25rem' }}
-                        variants={{ hovered: { background: 'rgba(0,0,0,0.15)' } }} transition={{ duration: 0.3 }} />
-                      <motion.p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 13, lineHeight: 1.75, fontWeight: 300, color: 'rgba(255,255,255,0.6)' }}
-                        variants={{ hovered: { color: 'rgba(0,0,0,0.7)' } }} transition={{ duration: 0.28 }}>
-                        {highlight}
-                      </motion.p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* CTA */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.15 }}>
-            <Link to="/events">
+            
+            {/* Arrow link to event */}
+            <Link to="/events" style={{ textDecoration: 'none' }}>
               <motion.div
-                style={{ position: 'relative', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.25)', padding: '16px 36px', display: 'inline-flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}
-                whileHover="hovered"
+                whileHover={{ x: 8 }}
+                style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 12, marginLeft: 'auto' }}
               >
-                <motion.div style={{ position: 'absolute', inset: 0, background: '#ffffff', transformOrigin: 'bottom', zIndex: 0 }}
-                  initial={{ scaleY: 0 }} variants={{ hovered: { scaleY: 1 } }} transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }} />
-                <motion.span style={{ position: 'relative', zIndex: 1, fontFamily: "'Poppins', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)' }}
-                  variants={{ hovered: { color: '#0a0a0a' } }} transition={{ duration: 0.2 }}>
-                  Explore Event Story
-                </motion.span>
-                {/* <motion.span style={{ position: 'relative', zIndex: 1, color: 'rgba(255,255,255,0.5)', fontSize: 14 }}
-                  variants={{ hovered: { color: '#0a0a0a', x: 4 } }} transition={{ duration: 0.2 }}>
-                  →
-                </motion.span> */}
+                <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.6)' }}>Know More</span>
+                <motion.div
+                  animate={{ x: [0, 4, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                  style={{ width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" color="rgba(0,0,0,0.7)">
+                    <path d="M10 5L15 10M15 10L10 15M15 10H5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </motion.div>
               </motion.div>
             </Link>
           </motion.div>
@@ -247,72 +197,67 @@ export function Home() {
        ══════════════════════════════════════════ */}
       <section className="py-16 md:py-24 lg:py-32 px-4 md:px-6 lg:px-12 max-w-screen-2xl mx-auto" style={{ background: '#ffffff' }}>
 
-        {/* Section label */}
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.8 }}
+        {/* Section label — Fade in with scale */}
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.8, ease: "easeOut" }}
           className="mb-12 md:mb-16">
-          <h2 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight leading-none" style={{ color: '#0a0a0a' }}>
+          <h2 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight leading-none" style={{ color: '#0a0a0a', marginBottom: '1rem' }}>
             <em className="italic">Films</em>
           </h2>
-          
+          <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 300, color: 'rgba(0,0,0,0.5)', fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', maxWidth: '50ch', lineHeight: 1.7 }}>
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {previewFilms.map((film, index) => (
             <Link key={film.id} to={`/films#film-${film.id}`}>
-              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+              <motion.div initial={{ opacity: 0, y: 50, rotateX: 10 }} whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 0.7, delay: index * 0.15 }}
+                transition={{ duration: 0.8, delay: index * 0.2, ease: [0.22, 1, 0.36, 1] }}
                 whileHover="hovered" className="group cursor-pointer">
 
-                {/* Film frame — thick black border like a cinema frame */}
+                {/* Film frame — clean minimal border */}
                 <motion.div
-                  className="relative overflow-hidden"
+                  className="relative overflow-hidden mb-4"
                   style={{
-                    border: '3px solid #0a0a0a',
+                    border: '1px solid rgba(0,0,0,0.12)',
                     aspectRatio: '16/9',
-                    background: '#0a0a0a',
+                    background: '#f5f5f5',
                   }}
-                  variants={{ hovered: { borderColor: '#000000' } }}
+                  variants={{ hovered: { borderColor: 'rgba(0,0,0,0.25)', boxShadow: '0 8px 24px rgba(0,0,0,0.08)' } }}
+                  transition={{ duration: 0.3 }}
                 >
                   <ImageWithFallback src={film.image} alt={film.title}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out"
-                    style={{ filter: 'grayscale(1) contrast(1.05)', transform: 'scale(1)' }} />
-                  <motion.div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.35)' }}
-                    variants={{ hovered: { background: 'rgba(0,0,0,0.15)' } }} transition={{ duration: 0.4 }} />
+                    className="w-full h-full object-cover transition-transform duration-500 ease-out"
+                    style={{ transform: 'scale(1)' }} />
+                  <motion.div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0)' }}
+                    variants={{ hovered: { background: 'rgba(0,0,0,0.1)' } }} transition={{ duration: 0.4 }} />
 
                   {/* Play button */}
                   <motion.div className="absolute inset-0 flex items-center justify-center"
                     initial={{ opacity: 0 }} variants={{ hovered: { opacity: 1 } }} transition={{ duration: 0.3 }}>
-                    <div className="w-16 h-16 rounded-full border-2 border-white flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)' }}>
-                      <div className="w-0 h-0 border-l-[16px] border-l-white border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent ml-1" />
+                    <div className="w-14 h-14 rounded-full border border-white flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.7)' }}>
+                      <div className="w-0 h-0 border-l-[12px] border-l-white border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent ml-0.5" />
                     </div>
                   </motion.div>
 
                   {/* Duration chip */}
-                  <div className="absolute top-4 right-4 px-3 py-1" style={{ background: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.2)' }}>
-                    <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: '0.1em', color: '#ffffff' }}>{film.duration}</span>
+                  <div className="absolute top-3 right-3 px-2.5 py-1.5" style={{ background: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                    <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: 10, fontWeight: 500, letterSpacing: '0.05em', color: '#ffffff' }}>{film.duration}</span>
                   </div>
-
-                  {/* Frame corners
-                  <div style={{ position: 'absolute', top: 8, left: 8, width: 16, height: 16, borderTop: '2px solid rgba(255,255,255,0.5)', borderLeft: '2px solid rgba(255,255,255,0.5)' }} />
-                  <div style={{ position: 'absolute', top: 8, right: 8, width: 16, height: 16, borderTop: '2px solid rgba(255,255,255,0.5)', borderRight: '2px solid rgba(255,255,255,0.5)' }} />
-                  <div style={{ position: 'absolute', bottom: 8, left: 8, width: 16, height: 16, borderBottom: '2px solid rgba(255,255,255,0.5)', borderLeft: '2px solid rgba(255,255,255,0.5)' }} />
-                  <div style={{ position: 'absolute', bottom: 8, right: 8, width: 16, height: 16, borderBottom: '2px solid rgba(255,255,255,0.5)', borderRight: '2px solid rgba(255,255,255,0.5)' }} /> */}
                 </motion.div>
 
-                {/* Film info strip */}
-                <div style={{ padding: '1.25rem 0', borderBottom: '1px solid rgba(0,0,0,0.1)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem' }}>
-                  <div>
-                    <h3 className="font-serif" style={{ fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', color: '#0a0a0a', lineHeight: 1.1, marginBottom: '0.5rem' }}>
-                      {film.title}
-                    </h3>
-                  
-                  </div>
-                  {/* <motion.span style={{ fontSize: 20, color: 'rgba(0,0,0,0.25)', flexShrink: 0, marginTop: 4 }}
-                    variants={{ hovered: { color: '#0a0a0a', x: 4 } }} transition={{ duration: 0.2 }}>
-                    →
-                  </motion.span> */}
+                {/* Film info */}
+                <div>
+                  <motion.h3 className="font-serif" style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)', color: '#0a0a0a', lineHeight: 1.2, marginBottom: '0.5rem' }}
+                    variants={{ hovered: { color: '#333333' } }} transition={{ duration: 0.3 }}>
+                    {film.title}
+                  </motion.h3>
+                  {film.description && (
+                    <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 11, fontWeight: 300, color: 'rgba(0,0,0,0.5)', lineHeight: 1.5 }}>
+                      {film.description}
+                    </p>
+                  )}
                 </div>
               </motion.div>
             </Link>
@@ -322,86 +267,78 @@ export function Home() {
         <Link to="/films">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
             whileHover={{ x: 8 }} transition={{ duration: 0.3 }}
-            className="mt-10 inline-flex items-center gap-2"
-            style={{ fontFamily: "'Poppins', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#0a0a0a', borderBottom: '2px solid #0a0a0a', paddingBottom: 6 }}>
-            Explore the Films
+            className="inline-flex items-center gap-2"
+            style={{ fontFamily: "'Poppins', sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#0a0a0a', borderBottom: '1.5px solid #0a0a0a', paddingBottom: 6 }}>
+            View All Films
             <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }}>→</motion.span>
           </motion.div>
         </Link>
       </section>
 
       {/* ══════════════════════════════════════════
-          PHOTOGRAPHY PRINTS — BLACK
+          PHOTOGRAPHY PRINTS — DARK GREY
        ══════════════════════════════════════════ */}
-      <section style={{ background: '#000000' }} className="py-16 md:py-24 lg:py-32 px-4 md:px-6 lg:px-12">
+      <section style={{ background: '#ffffff' }} className="py-16 md:py-24 lg:py-32 px-4 md:px-6 lg:px-12">
         <div className="max-w-screen-2xl mx-auto">
 
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.8 }}
+          <motion.div initial={{ opacity: 0, x: -50, rotateZ: -2 }} whileInView={{ opacity: 1, x: 0, rotateZ: 0 }}
+            viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="mb-12 md:mb-16">
-            <h2 className="font-serif tracking-tight leading-none" style={{ fontSize: 'clamp(2.8rem, 7vw, 6.5rem)', color: '#ffffff' }}>
+            <h2 className="font-serif tracking-tight leading-none" style={{ fontSize: 'clamp(2.8rem, 7vw, 6.5rem)', color: '#010101', marginBottom: '1rem' }}>
               Alternative<br />
-              <em className="italic" style={{ color: '#ffffff' }}>Photography Prints</em>
+              <em className="italic" style={{ color: '#070404' }}>Prints</em>
             </h2>
-            
+            <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 300, color: 'rgba(255,255,255,0.5)', fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', maxWidth: '50ch', lineHeight: 1.7 }}>
+            </p>
           </motion.div>
 
           {hasArtworkData ? (
             <>
-              {/* FRAMED grid — 4 photos, natural color, 2x2 */}
-             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-  {previewArtworks.slice(0, 4).map((artwork, index) => (
-    <motion.div
-      key={artwork.id}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.6, delay: index * 0.08 }}
-      whileHover="hovered"
-      className="group cursor-pointer"
-    >
-      {/* Frame (same system as artifacts but darker) */}
-      <motion.div
-        className="p-2 bg-[#1c1c1c] border border-white/10 mb-2"
-        variants={{ hovered: { borderColor: 'rgba(255,255,255,0.3)' } }}
-        transition={{ duration: 0.3 }}
-      >
-        <div style={{ padding: '8px', background: '#6c3203', border: '1px solid rgba(0,0,0,0.06)' }}>
-        <div className="p-1.5 bg-[#141414] border border-white/5">
-          <div className="aspect-[3/4] overflow-hidden">
-            <motion.div
-              className="w-full h-full"
-              variants={{ hovered: { scale: 1.05 } }}
-              transition={{ duration: 0.5 }}
-            >
-              <ImageWithFallback
-                src={artwork.image}
-                alt={artwork.title}
-                className="w-full h-full object-cover"
-              />
-            </motion.div>
-          </div>
-         </div>
-        </div>
-      </motion.div>
+              {/* Clean grid — 4 photos */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+                {previewArtworks.slice(0, 4).map((artwork, index) => (
+                  <motion.div
+                    key={artwork.id}
+                    initial={{ opacity: 0, y: 30, rotateX: -8 }}
+                    whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                    viewport={{ once: true, margin: '-50px' }}
+                    transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                    whileHover="hovered"
+                    className="group cursor-pointer"
+                  >
+                    {/* Simple frame */}
+                    <motion.div
+                      style={{
+                        padding: '8px',
+                        background: '#1a1a1a',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        marginBottom: '0.75rem',
+                      }}
+                      variants={{ hovered: { borderColor: 'rgba(255,255,255,0.25)', background: '#252525' } }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="aspect-[3/4] overflow-hidden">
+                        <motion.div
+                          className="w-full h-full"
+                          variants={{ hovered: { scale: 1.03 } }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          <ImageWithFallback
+                            src={artwork.image}
+                            alt={artwork.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </motion.div>
+                      </div>
+                    </motion.div>
 
-      {/* Caption (like artifacts) */}
-      {/* <div className="flex items-center justify-between">
-        <p className="text-[11px] text-white/60 font-light leading-tight">
-          {artwork.title}
-        </p>
-
-        <motion.span
-          className="text-white/20 text-sm"
-          variants={{ hovered: { color: '#ffffff', x: 3 } }}
-          transition={{ duration: 0.2 }}
-        >
-          →
-        </motion.span>
-      </div> */}
-    </motion.div>
-  ))}
-</div>
+                    {/* Title */}
+                    <motion.h4 className="font-serif" style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)', color: '#ffffff', lineHeight: 1.2, marginBottom: '0.25rem' }}>
+                      {artwork.title}
+                    </motion.h4>
+                  </motion.div>
+                ))}
+              </div>
             </>
           ) : (
             <div className="py-24 text-center">
@@ -416,8 +353,8 @@ export function Home() {
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
               whileHover={{ x: 8 }} transition={{ duration: 0.3 }}
               className="inline-flex items-center gap-2"
-              style={{ fontFamily: "'Poppins', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#ffffff', borderBottom: '2px solid rgba(255,255,255,0.4)', paddingBottom: 6 }}>
-              Explore the Prints
+              style={{ fontFamily: "'Poppins', sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#ffffff', borderBottom: '1.5px solid rgba(255,255,255,0.5)', paddingBottom: 6 }}>
+              View All Prints
               <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }}>→</motion.span>
             </motion.div>
           </Link>
@@ -425,7 +362,7 @@ export function Home() {
       </section>
 
       {/* ══════════════════════════════════════════
-          ARTIFACTS — WHITE
+          ARTIFACTS — WHITE (Reference model)
        ══════════════════════════════════════════ */}
       <section style={{ background: '#ffffff' }} className="py-16 md:py-24 lg:py-32 px-4 md:px-6 lg:px-12">
         <div className="max-w-screen-2xl mx-auto">
@@ -441,77 +378,77 @@ export function Home() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {previewProducts.map((product, index) => (
               <Link key={product.id} to={`/products#product-${product.id}`}>
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+                <motion.div initial={{ opacity: 0, scale: 0.8, y: 20 }} whileInView={{ opacity: 1, scale: 1, y: 0 }}
                   viewport={{ once: true, margin: '-50px' }}
-                  transition={{ duration: 0.6, delay: index * 0.08 }}
+                  transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
                   whileHover="hovered" className="group cursor-pointer">
 
-                  {/* Product frame — matches photo section */}
+                  {/* Product frame — clean minimal */}
                   <motion.div
                     style={{
                       padding: '10px',
-                      background: '#f5f5f5',
+                      background: '#f8f8f8',
                       border: '1px solid rgba(0,0,0,0.1)',
-                      marginBottom: '0.75rem',
+                      marginBottom: '1rem',
                     }}
-                    variants={{ hovered: { border: '1px solid rgba(0,0,0,0.4)', background: '#efefef' } }}
+                    variants={{ hovered: { border: '1px solid rgba(0,0,0,0.25)', background: '#f0f0f0' } }}
                     transition={{ duration: 0.3 }}
                   >
-                    
-                      <div className="aspect-square overflow-hidden">
-                        <motion.div variants={{ hovered: { scale: 1.05 } }} transition={{ duration: 0.5 }} style={{ height: '100%' }}>
-                          <ImageWithFallback src={product.image} alt={product.name}
-                            className="w-full h-full object-cover"
-                            style={{ filter: 'grayscale(0.3) contrast(1.05)' }} />
-                        </motion.div>
-                      </div>
-                    
+                    <div className="aspect-square overflow-hidden">
+                      <motion.div variants={{ hovered: { scale: 1.05 } }} transition={{ duration: 0.5 }} style={{ height: '100%' }}>
+                        <ImageWithFallback src={product.image} alt={product.name}
+                          className="w-full h-full object-cover"
+                          style={{ filter: 'grayscale(0.2) contrast(1.02)' }} />
+                      </motion.div>
+                    </div>
                   </motion.div>
 
                   {/* Product info */}
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
-                    <div>
-                      <h4 className="font-serif" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.1rem)', color: '#0a0a0a', lineHeight: 1.2, marginBottom: '0.25rem' }}>
-                        {product.name}
-                      </h4>
-                      <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 11, fontWeight: 300, color: 'rgba(0,0,0,0.45)', lineHeight: 1.6 }} className="line-clamp-2">
-                        {product.description}
-                      </p>
-                    </div>
-                    {/* <motion.span style={{ fontSize: 16, color: 'rgba(0,0,0,0.2)', flexShrink: 0, marginTop: 2 }}
-                      variants={{ hovered: { color: '#0a0a0a', x: 3 } }} transition={{ duration: 0.2 }}>
-                      →
-                    </motion.span> */}
+                  <div>
+                    <h4 className="font-serif" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.1rem)', color: '#0a0a0a', lineHeight: 1.2, marginBottom: '0.3rem' }}>
+                      {product.name}
+                    </h4>
+                    <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 11, fontWeight: 300, color: 'rgba(0,0,0,0.45)', lineHeight: 1.5 }} className="line-clamp-2">
+                      {product.description}
+                    </p>
                   </div>
                 </motion.div>
               </Link>
             ))}
           </div>
 
-          <Link to="/products">
-            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-              whileHover={{ x: 8 }} transition={{ duration: 0.3 }}
-              className="mt-10 inline-flex items-center gap-2"
-              style={{ fontFamily: "'Poppins', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#0a0a0a', borderBottom: '2px solid #0a0a0a', paddingBottom: 6 }}>
-              View All Artifacts
-              <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }}>→</motion.span>
-            </motion.div>
-          </Link>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="mt-12"
+          >
+            <Link to="/products">
+              <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+                whileHover={{ x: 8 }} transition={{ duration: 0.3 }}
+                className="inline-flex items-center gap-2"
+                style={{ fontFamily: "'Poppins', sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#0a0a0a', borderBottom: '1.5px solid #0a0a0a', paddingBottom: 6 }}>
+                View All Artifacts
+                <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }}>→</motion.span>
+              </motion.div>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════
-          PRESS & MEDIA — BLACK
+          PRESS & MEDIA — DARK GREY
        ══════════════════════════════════════════ */}
-      <section style={{ background: '#0a0a0a' }} className="py-16 md:py-24 lg:py-32 overflow-hidden">
+      <section style={{ background: '#1a1a1a' }} className="py-16 md:py-24 lg:py-32 overflow-hidden">
 
         <div className="max-w-screen-2xl mx-auto px-4 md:px-6 lg:px-12 mb-10 md:mb-16">
           <motion.h2
-            initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-            transition={{ duration: 1 }}
+            initial={{ opacity: 0, x: 60 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif"
             style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', color: '#ffffff', lineHeight: 1, letterSpacing: '-0.02em', fontWeight: 600, marginBottom: '1rem' }}
           >
@@ -520,26 +457,23 @@ export function Home() {
 
           <motion.p
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.2 }}
-            style={{ fontFamily: "'Poppins', sans-serif", fontSize: 13, fontWeight: 300, color: 'rgba(255,255,255,0.4)', maxWidth: '40ch', lineHeight: 1.7 }}
+            style={{ fontFamily: "'Poppins', sans-serif", fontSize: 13, fontWeight: 300, color: 'rgba(255,255,255,0.5)', maxWidth: '40ch', lineHeight: 1.7 }}
           >
             Featured across 7 major outlets reaching over 50 million readers across India.
           </motion.p>
         </div>
 
-        {/* Ticker */}
-        {/* <MediaTicker dark={true} /> */}
+        {/* Press cards — Simplified */}
+        <div className="max-w-screen-2xl mx-auto px-4 md:px-6 lg:px-12">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: '1.5rem' }}>
 
-        {/* Press overview cards — NO links, just showcase */}
-        <div className="max-w-screen-2xl mx-auto px-4 md:px-6 lg:px-12 mt-2">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 2 }}>
-
-            {/* First item spans full width — hero card */}
+            {/* First item — hero card */}
             {pressItems.slice(0, 1).map((item) => (
               <motion.div key={item.id}
                 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
                 transition={{ duration: 0.7 }}
                 style={{
-                  background: '#161616',
+                  background: '#252525',
                   border: '1px solid rgba(255,255,255,0.08)',
                   padding: 'clamp(2rem, 4vw, 3rem)',
                   display: 'grid',
@@ -549,63 +483,47 @@ export function Home() {
                 }}
               >
                 <div>
-                  <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: '1.5rem' }}>
+                  <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 9, fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '1.5rem' }}>
                     {item.source}
                   </p>
                   <p className="font-serif" style={{ fontSize: 'clamp(3.5rem, 9vw, 7rem)', color: '#ffffff', lineHeight: 1, fontWeight: 600, letterSpacing: '-0.02em' }}>
                     {item.sourceShort}
                   </p>
                 </div>
-                <div style={{ borderLeft: '1px solid rgba(255,255,255,0.08)', paddingLeft: '2rem' }}>
-                  <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 'clamp(0.85rem, 1.5vw, 1.05rem)', fontWeight: 300, color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, fontStyle: 'italic' }}>
+                <div style={{ borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '2rem' }}>
+                  <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 'clamp(0.85rem, 1.5vw, 1.05rem)', fontWeight: 300, color: 'rgba(255,255,255,0.65)', lineHeight: 1.8, fontStyle: 'italic' }}>
                     "{item.excerpt}"
-                  </p>
-                  <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)', marginTop: '1.25rem' }}>
-                    — {item.source}
                   </p>
                 </div>
               </motion.div>
             ))}
 
             {/* Remaining items — 2 col grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
               {pressItems.slice(1).map((item, index) => (
                 <motion.div key={item.id}
-                  initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.06 }}
+                  initial={{ opacity: 0, y: 24, rotateY: 5 }} whileInView={{ opacity: 1, y: 0, rotateY: 0 }} viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
                   style={{
-                    background: '#141414',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                    padding: '2rem 2.25rem 2.25rem',
+                    background: '#202020',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    padding: '1.5rem',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    gap: '1.5rem',
-                    minHeight: 200,
+                    gap: '1rem',
+                    minHeight: 160,
                   }}
                 >
                   {/* Source label */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
-                      {item.source}
-                    </p>
-                    <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.1)', fontFamily: "'Poppins', sans-serif" }}>
-                      PRESS
-                    </span>
-                  </div>
-
-                  {/* Short name */}
-                  <p className="font-serif" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', color: '#ffffff', lineHeight: 1, fontWeight: 600, letterSpacing: '-0.02em' }}>
-                    {item.sourceShort}
+                  <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 9, fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>
+                    {item.source}
                   </p>
 
-                  {/* Divider + excerpt */}
-                  <div>
-                    <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', marginBottom: '1rem' }} />
-                    {/* <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 12, fontWeight: 300, color: 'rgba(255,255,255,0.4)', lineHeight: 1.7, fontStyle: 'italic' }}>
-                      "{item.excerpt.length > 90 ? item.excerpt.slice(0, 90) + '…' : item.excerpt}"
-                    </p> */}
-                  </div>
+                  {/* Short name */}
+                  <p className="font-serif" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#ffffff', lineHeight: 1, fontWeight: 600, letterSpacing: '-0.02em' }}>
+                    {item.sourceShort}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -616,9 +534,9 @@ export function Home() {
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.2 }}
             style={{
-              marginTop: 2,
-              background: '#111111',
-              border: '1px solid rgba(255,255,255,0.06)',
+              marginTop: '1.5rem',
+              background: '#0f0f0f',
+              border: '1px solid rgba(255,255,255,0.08)',
               padding: '2rem 2.5rem',
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
@@ -627,14 +545,14 @@ export function Home() {
           >
             {[
               { num: '7', label: 'Major Outlets' },
-              { num: '50M+', label: 'Readers Reached' },
-              { num: '4', label: 'Cities Covered' },
+              { num: '50M+', label: 'Readers' },
+              { num: '4', label: 'Cities' },
             ].map((stat, i) => (
-              <div key={i} style={{ borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.06)' : 'none', paddingLeft: i > 0 ? '2rem' : 0 }}>
+              <div key={i} style={{ borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.08)' : 'none', paddingLeft: i > 0 ? '2rem' : 0 }}>
                 <p className="font-serif" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', color: '#ffffff', fontWeight: 600, lineHeight: 1, marginBottom: '0.5rem' }}>
                   {stat.num}
                 </p>
-                <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
+                <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>
                   {stat.label}
                 </p>
               </div>
@@ -644,46 +562,44 @@ export function Home() {
       </section>
 
       {/* ══════════════════════════════════════════
-          LOCATIONS / THE VOYAGE — WHITE
+          LOCATIONS / THE VOYAGE — LIGHT GREY
        ══════════════════════════════════════════ */}
-      <section style={{ background: '#ffffff' }} className="py-16 md:py-24 lg:py-32 px-4 md:px-6 lg:px-12 max-w-screen-2xl mx-auto">
+      <section style={{ background: '#fafafa' }} className="py-16 md:py-24 lg:py-32 px-4 md:px-6 lg:px-12 max-w-screen-2xl mx-auto">
         <div className="max-w-4xl">
-          <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            transition={{ duration: 1 }}
+          <motion.h2 initial={{ opacity: 0, x: 60, rotateZ: 3 }} whileInView={{ opacity: 1, x: 0, rotateZ: 0 }} viewport={{ once: true }}
+            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif tracking-tight leading-none"
-            style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', color: '#0a0a0a', marginBottom: '2rem' }}>
+            style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', color: '#0a0a0a', marginBottom: '0.5rem' }}>
             The<br /><em className="italic">Voyage</em>
           </motion.h2>
 
-          {/* <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.2 }}
-            style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 300, color: 'rgba(0,0,0,0.55)', fontSize: 'clamp(0.9rem, 1.5vw, 1.1rem)', lineHeight: 1.8, maxWidth: '52ch', marginBottom: '3rem' }}>
-            This exhibition <em style={{ fontStyle: 'italic', color: '#0a0a0a' }}>moves</em>. It{' '}
-            <em style={{ fontStyle: 'italic', color: '#0a0a0a' }}>transforms</em>.
-            It adapts to each city it inhabits, creating new dialogues between place, memory, and the communities that hold them.
-          </motion.p> */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 300, color: 'rgba(0,0,0,0.5)', fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', lineHeight: 1.7, maxWidth: '50ch', marginBottom: '3rem' }}
+          >
+            Exhibition journey across four Indian cities — New Delhi, Goa, Chennai, and Bengaluru.
+          </motion.p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 2, marginBottom: '3rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: '1.5rem', marginBottom: '3rem' }}>
             {cityNames.map((city, index) => (
               <motion.div key={city}
-                initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 40, scale: 0.95 }} whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.6, delay: index * 0.08 }}
+                transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
                 whileHover="hovered"
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem 0', borderBottom: '1px solid rgba(0,0,0,0.1)', cursor: 'pointer' }}
               >
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '2rem' }}>
-                  <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.3)', minWidth: 80 }}>
+                  <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.3)', minWidth: 80 }}>
                     Chapter {String(index + 1).padStart(2, '0')}
                   </span>
                   <h3 className="font-serif" style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', color: '#0a0a0a', lineHeight: 1 }}>
                     {city}
                   </h3>
                 </div>
-                {/* <motion.span style={{ fontSize: 20, color: 'rgba(0,0,0,0.2)' }}
-                  variants={{ hovered: { color: '#0a0a0a', x: 6 } }} transition={{ duration: 0.2 }}>
-                  →
-                </motion.span> */}
               </motion.div>
             ))}
           </div>
@@ -692,7 +608,7 @@ export function Home() {
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
               whileHover={{ x: 8 }} transition={{ duration: 0.3 }}
               className="inline-flex items-center gap-2"
-              style={{ fontFamily: "'Poppins', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#0a0a0a', borderBottom: '2px solid #0a0a0a', paddingBottom: 6 }}>
+              style={{ fontFamily: "'Poppins', sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#0a0a0a', borderBottom: '1.5px solid #0a0a0a', paddingBottom: 6 }}>
               Explore All Locations
               <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }}>→</motion.span>
             </motion.div>
