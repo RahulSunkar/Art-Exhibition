@@ -8,16 +8,17 @@ import Image5 from '../data/Prints/_MG_7064.jpg';
 import Image6 from '../data/Prints/_MG_7065.jpg';
 import TremorsPoster from '../data/FilmsData/Tremor_Poster.jpg';
 import DushorPoster from '../data/FilmsData/Dushor_Poster1.jpg';
-
+import NewsPaperImg from '../data/EventData/NewIndiaExpressNewsPapper.jpeg';
 /* ─── Types ─────────────────────────────────────────────── */
 interface PressItem {
   id: number;
   source: string;
   sourceShort: string;
   title: string;
-  url: string;
+  url?: string;
   excerpt?: string;
   accentColor: string;
+  img?: string;
 }
 interface GalleryImage {
   id: number;
@@ -39,54 +40,122 @@ const galleryImages: GalleryImage[] = [
 
 const pressItems: PressItem[] = [
   {
-    id: 1, source: 'Mint', sourceShort: 'MINT',
-    title: "5 Events You Don't Want to Miss This Week",
-    url: 'https://www.livemint.com/mint-lounge/art-and-culture/event-planner-art-culture-comedy-womens-day-ramadan-iftar-feast-11772799990027.html',
-    excerpt: 'A Voyage to Permanence featured among the top cultural events not to be missed.',
-    accentColor: '#00A550',
+    id: 1,
+    source: 'Home Grown',
+    sourceShort: 'HG',
+    title: "Inside Purandar Chaudhuri's trilogy of displacement and urban life.",
+    url: 'https://homegrown.co.in/amp/story/homegrown-creators/a-voyage-to-permanence-inside-purandar-chaudhuris-trilogy-of-displacement-urban-life',
+    excerpt: "Inside Purandar Chaudhuri's trilogy of displacement and urban life.",
+    accentColor: '#2D6A4F',
   },
   {
-    id: 2, source: 'Elle India', sourceShort: 'ELLE',
-    title: "The Exhibitions Everyone's Talking About This Month",
-    url: 'https://elle.in/life-culture/the-exhibitions-everyones-talking-about-this-month-11180232',
-    excerpt: "Elle's curated picks of the most compelling art exhibitions across India.",
-    accentColor: '#C8102E',
+    id: 2,
+    source: 'ACF India',
+    sourceShort: 'ACF',
+    title: 'A Voyage to Permanence — featured by Alliance Culturelle Française.',
+    url: 'https://www.instagram.com/p/DWOncyFEp2T/',
+    excerpt: 'A Voyage to Permanence — featured by Alliance Culturelle Française.',
+    accentColor: '#003189',
   },
   {
-    id: 3, source: 'Hindustan Times', sourceShort: 'HT',
-    title: 'Art In March 2026: The Exhibition Hotlist',
-    url: 'https://share.google/VWlhQvTlmz7gGYsHj',
-    excerpt: 'A round-up of must-see exhibitions this March — A Voyage to Permanence leads the list.',
-    accentColor: '#D62728',
+    id: 3,
+    source: 'India Today',
+    sourceShort: 'IT',
+    title: "At the heart of the exhibition are Chaudhuri's films Dhushor, Tremors, and Impressions of Mingling.",
+    url: 'https://www.indiatoday.in/amp/magazine/leisure/story/20260323-melancholic-journey-a-voyage-to-permanence-immersive-exhibition-2881656-2026-03-14',
+    excerpt: "At the heart of the exhibition are Chaudhuri's films Dhushor, Tremors, and Impressions of Mingling. Exploring themes of memory, migration, erasure and survival, the works unfold through a contemplative visual language.",
+    accentColor: '#C0392B',
   },
   {
-    id: 4, source: 'Press Trust of India', sourceShort: 'PTI',
-    title: 'A Voyage to Permanence Opens in Delhi',
-    url: 'https://www.instagram.com/p/DVlCv7hjbQ_/?img_index=2&igsh=MXBwZG9wOTk1MTk2dQ==',
-    excerpt: 'An immersive dialogue between cinema and art opens to audiences in Delhi.',
-    accentColor: '#003087',
-  },
-  {
-    id: 5, source: 'News Drum', sourceShort: 'ND',
-    title: "Delhi's Art Scene Comes Alive This March",
-    url: 'https://www.instagram.com/p/DVlCv7hjbQ_/?img_index=2&igsh=MXBwZG9wOTk1MTk2dQ==',
-    excerpt: 'News Drum spotlights the cultural surge sweeping Delhi this season.',
-    accentColor: '#FF6B00',
-  },
-  {
-    id: 6, source: 'Abirpothi', sourceShort: 'ABP',
-    title: 'A Voyage to Permanence — Immersive Dialogue Between Cinema and Art',
+    id: 4,
+    source: 'Abir Pothi',
+    sourceShort: 'ABP',
+    title: 'The five-day event reimagines cinema within the context of visual art.',
     url: 'https://www.abirpothi.com/a-voyage-to-permanence-an-immersive-dialogue-between-cinema-and-art-set-to-open-in-delhi/',
-    excerpt: 'A contemplative journey through layers of time, image, and material.',
+    excerpt: 'The five-day event reimagines cinema within the context of visual art. Rather than projecting films as linear narratives, A Voyage to Permanence transforms them into spatial experiences that oscillate between abstraction and figuration, inviting viewers to engage with the moving image as a meditative, almost tactile encounter.',
     accentColor: '#8B5E3C',
   },
   {
-    id: 7, source: 'Esquire India', sourceShort: 'ESQ',
-    title: 'Culture Guide: What to See in March 2026',
-    url: 'https://elle.in/life-culture/the-exhibitions-everyones-talking-about-this-month-11180232',
-    excerpt: "Esquire's definitive guide to the galleries worth your time this month.",
-    accentColor: '#1A1A1A',
+    id: 5,
+    source: 'Esquire India',
+    sourceShort: 'ESQ',
+    title: 'A layered dialogue between moving image, still image, sound, and text.',
+    url: 'https://www.esquireindia.co.in/culture/art-and-design/art-in-march-2026-the-exhibition-hotlist/amp',
+    excerpt: 'A layered dialogue between moving image, still image, sound, and text.',
+    accentColor: '#d6c2a1',
   },
+  {
+    id: 6,
+    source: 'Press Trust of India',
+    sourceShort: 'PTI',
+    title: 'A new multidisciplinary exhibition built around three experimental films by filmmaker Purandar Chaudhuri.',
+    url: 'https://www.ptinews.com/story/national/multidisciplinary-exhibition-to-reimagine-act-of-viewing-cinema-within-gallery-context/3443716',
+    excerpt: 'A new multidisciplinary exhibition, built around three experimental films by filmmaker Purandar Chaudhuri, will aim to reimagine the act of viewing cinema within a gallery context.',
+    accentColor: '#003087',
+  },
+  {
+    id: 7,
+    source: 'Hindustan Times',
+    sourceShort: 'HT',
+    title: 'Multidisciplinary exhibition to reimagine act of viewing cinema within gallery context.',
+    url: 'https://www.hindustantimes.com/lifestyle/art-culture/multidisciplinary-exhibition-to-reimagine-act-of-viewing-cinema-within-gallery-context-101772882533082-amp.html',
+    excerpt: 'Multidisciplinary exhibition to reimagine act of viewing cinema within gallery context.',
+    accentColor: '#E63946',
+  },
+  {
+    id: 8,
+    source: 'NewsDrum',
+    sourceShort: 'ND',
+    title: 'Multidisciplinary exhibition to reimagine act of viewing cinema within gallery context.',
+    url: 'https://www.newsdrum.in/national/multidisciplinary-exhibition-to-reimagine-act-of-viewing-cinema-within-gallery-context-11183747',
+    excerpt: 'Multidisciplinary exhibition to reimagine act of viewing cinema within gallery context.',
+    accentColor: '#457B9D',
+  },
+  {
+    id: 9,
+    source: 'Elle India',
+    sourceShort: 'ELLE',
+    title: 'Transforming cinema into a gallery experience through screenings, photography, installations, and live programming.',
+    url: 'https://elle.in/life-culture/the-exhibitions-everyones-talking-about-this-month-11180232',
+    excerpt: 'Transforming cinema into a gallery experience through screenings, photography, installations, and live programming.',
+    accentColor: '#C8102E',
+  },
+  {
+    id: 10,
+    source: 'Live Mint',
+    sourceShort: 'MINT',
+    title: 'A Voyage to Permanence listed among the top art and culture events of the month.',
+    url: 'https://www.livemint.com/mint-lounge/art-and-culture/event-planner-art-culture-comedy-womens-day-ramadan-iftar-feast-11772799990027.html',
+    excerpt: 'A Voyage to Permanence listed among the top art and culture events of the month.',
+    accentColor: '#1A936F',
+  },
+  {
+    id: 11,
+    source: 'Abir Pothi (Reel)',
+    sourceShort: 'ABP',
+    title: 'A Voyage to Permanence — visual coverage from Abir Pothi.',
+    url: 'https://www.instagram.com/reel/DV0muPEiqaG/?igsh=bm55am5jd3prb2Jk',
+    excerpt: 'A Voyage to Permanence — visual coverage from Abir Pothi.',
+    accentColor: '#8B5E3C',
+  },
+  {
+    id: 12,
+    source: 'New india Express',
+    sourceShort: 'NIE',
+    title: 'Three films, three journeys',
+    url: 'https://www.newindianexpress.com/states/delhi/2026/Mar/15/three-films-three-journeys',
+    excerpt: 'Three films, three journeys',
+    accentColor: '#8f2222',
+  }, 
+  {
+    id: 12,
+    source: 'New india Express[News paper]',
+    sourceShort: 'NIE',
+    title: 'Three films, three journeys',
+    img:NewsPaperImg,
+    excerpt: 'Three films, three journeys',
+    accentColor: '#8f2222',
+  },  
 ];
 
 /* ─── Hooks ──────────────────────────────────────────────── */
@@ -111,6 +180,13 @@ function PressTile({ item, index }: { item: PressItem; index: number }) {
   const { ref, inView } = useInView(0.08);
   const fromLeft = index % 2 === 0;
 
+  // Inline style for background image if it exists
+  const bgImageStyle = item.img ? {
+    backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${item.img})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center'
+  } : {};
+
   return (
     <div
       ref={ref}
@@ -121,32 +197,29 @@ function PressTile({ item, index }: { item: PressItem; index: number }) {
       }}
     >
       <a
-        href={item.url}
-        target="_blank"
+        href={item.url || '#'} 
+        target={item.url ? "_blank" : "_self"}
         rel="noopener noreferrer"
         className="press-tile"
+        style={bgImageStyle}
+        onClick={(e) => !item.url && e.preventDefault()} // Disable click if no URL
       >
-        {/* background fills black on hover via CSS */}
         <div className="tile-bg" />
 
-        {/* top row: source name + arrow */}
         <div className="tile-top">
           <span className="tile-source" style={{ '--ac': item.accentColor } as React.CSSProperties}>
             {item.source}
           </span>
-          <span className="tile-arrow">↗</span>
+          {item.url && <span className="tile-arrow">↗</span>}
         </div>
 
-        {/* big title */}
         <h3 className="tile-title">{item.title}</h3>
 
-        {/* excerpt bottom */}
         {item.excerpt && <p className="tile-excerpt">{item.excerpt}</p>}
 
-        {/* bottom bar: short code */}
         <div className="tile-bottom">
           <span className="tile-code">{item.sourceShort}</span>
-          <span className="tile-read">Read Article</span>
+          {item.url && <span className="tile-read">Read Article</span>}
         </div>
       </a>
     </div>
@@ -231,7 +304,7 @@ export function Media() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 20; }
 
@@ -295,7 +368,7 @@ export function Media() {
         }
 
         .hero-title {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Poppins', sans-serif;
           font-size: clamp(3.2rem, 9vw, 7rem);
           font-weight: 600; color: #fff;
           line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 52px;
@@ -316,7 +389,7 @@ export function Media() {
         }
         .hero-stat:last-child { border-right: none; }
         .hero-stat-val {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Poppins', sans-serif;
           font-size: 2.8rem; font-weight: 700; color: #fff; line-height: 1; margin-bottom: 6px;
         }
         .hero-stat-lbl {
@@ -351,7 +424,7 @@ export function Media() {
         }
         .sec-rule { flex: 1; height: 1px; background: var(--rule); }
         .sec-title {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Poppins', sans-serif;
           font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 600;
           max-width: 1200px; margin: 0 auto; padding: 12px 48px 44px;
           line-height: 1.15; color: var(--ink);
@@ -425,7 +498,7 @@ export function Media() {
         }
 
         .tile-title {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Poppins', sans-serif;
           font-size: clamp(1.4rem, 2.8vw, 2rem);
           font-weight: 600; line-height: 1.2;
           color: var(--ink);
@@ -607,16 +680,13 @@ export function Media() {
             <p className="hero-eyebrow">Press &amp; Media Coverage</p>
             <h1 className="hero-title">A Voyage to<br /><em>Permanence</em></h1>
             <div className="hero-stats">
+
               <div className="hero-stat">
-                <div className="hero-stat-val">7</div>
-                <div className="hero-stat-lbl">Media Outlets</div>
-              </div>
-              <div className="hero-stat">
-                <div className="hero-stat-val">8+</div>
+                <div className="hero-stat-val">5+</div>
                 <div className="hero-stat-lbl">Press Mentions</div>
               </div>
               <div className="hero-stat">
-                <div className="hero-stat-val">{galleryImages.length}</div>
+                <div className="hero-stat-val">12+</div>
                 <div className="hero-stat-lbl">Media Images</div>
               </div>
               <div className="hero-stat">

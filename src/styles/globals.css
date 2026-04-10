@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -135,13 +134,13 @@
   }
 
   .font-serif {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: 'Poppins', sans-serif;
   }
 }
 
 /* ✅ Outside @layer so these are never overridden */
 .font-bebas {
-  font-family: 'Bebas Neue', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
 }
 
 .font-poppins {

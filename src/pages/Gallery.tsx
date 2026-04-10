@@ -1,170 +1,227 @@
-import { motion } from 'motion/react';
-import { useState, useMemo, useCallback, memo } from 'react';
-import { X } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useState, useCallback } from 'react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { artworks } from '../data/store';
 
-// Memoized Gallery Item Component
-const GalleryItem = memo(({ artwork, index, onSelectArtwork }: any) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.95 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{
-      duration: 0.4,
-      delay: Math.min(index * 0.03, 0.3), // Cap delay to avoid excessive stagger
-      ease: "easeOut"
-    }}
-    whileHover={{ scale: 1.04, y: -3 }}
-    onClick={() => onSelectArtwork(artwork)}
-    className="group cursor-pointer aspect-[3/4] overflow-hidden rounded-sm relative"
-  >
-    <motion.div
-      className="w-full h-full relative bg-gray-900"
-      whileHover={{ scale: 1.06 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-    >
-      <ImageWithFallback
-        src={artwork.image}
-        alt={artwork.title}
-        className="w-full h-full object-cover group-hover:brightness-105 transition-all duration-500"
-        loading="lazy"
-      />
-    </motion.div>
-
-    {/* Overlay with title on hover */}
-    <motion.div
-      className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent flex items-end p-4"
-      initial={{ opacity: 0 }}
-      whileHover={{ opacity: 1 }}
-      transition={{ duration: 0.25 }}
-    >
-      <motion.h3
-        className="text-white font-serif text-sm md:text-base lg:text-lg line-clamp-2"
-        initial={{ y: 10, opacity: 0 }}
-        whileHover={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.25 }}
-      >
-        {artwork.title}
-      </motion.h3>
-    </motion.div>
-  </motion.div>
-));
-
-GalleryItem.displayName = 'GalleryItem';
-
 export function Gallery() {
-  const [selectedArtwork, setSelectedArtwork] = useState<any>(null);
-  const handleSelectArtwork = useCallback((artwork: any) => {
-    setSelectedArtwork(artwork);
-  }, []);
+  const [selected, setSelected] = useState<number | null>(null);
+
+  const openImage = useCallback((i: number) => setSelected(i), []);
+  const close = useCallback(() => setSelected(null), []);
+  const prev = useCallback(() =>
+    setSelected(i => i !== null ? (i - 1 + artworks.length) % artworks.length : null), []);
+  const next = useCallback(() =>
+    setSelected(i => i !== null ? (i + 1) % artworks.length : null), []);
+
+  const handleKey = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowLeft') prev();
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'Escape') close();
+  }, [prev, next, close]);
+
+  // Even column distribution
+  const numCols = 4;
+  const perCol = Math.ceil(artworks.length / numCols);
+  const cols = Array.from({ length: numCols }, (_, i) =>
+    artworks.slice(i * perCol, (i + 1) * perCol)
+  );
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Hero Section - Minimal */}
-      <section className="relative h-[50vh] flex items-center justify-center overflow-hidden pt-20">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
+
+      {/* Header */}
+      <section className="pt-32 pb-16 px-6 text-center">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="text-center z-10"
+          className="font-serif text-7xl md:text-8xl tracking-tight mb-4"
         >
-          <motion.h1
-            className="font-serif text-6xl md:text-7xl lg:text-8xl mb-4 tracking-tight"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            Gallery
-          </motion.h1>
-          <motion.p
-            className="text-lg md:text-xl text-white/60 tracking-wide"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Visual explorations
-          </motion.p>
-        </motion.div>
-
-        {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black -z-10" />
+          Prints
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="text-white/40 text-sm tracking-[0.2em] uppercase"
+        >
+          {artworks.length} works
+        </motion.p>
       </section>
 
-      {/* Simple Gallery Grid - All Images */}
-      <section className="px-4 md:px-6 lg:px-12 py-16 md:py-20 lg:py-24">
-        <div className="max-w-screen-2xl mx-auto">
-          {/* Grid with optimized animations */}
-          <motion.div
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delayChildren: 0.1, staggerChildren: 0.02 }}
-          >
-            {artworks.map((artwork, index) => (
-              <GalleryItem
-                key={artwork.id}
-                artwork={artwork}
-                index={index}
-                onSelectArtwork={handleSelectArtwork}
-              />
-            ))}
-          </motion.div>
+      {/* Masonry Grid — Desktop 4 cols */}
+      <section className="px-3 md:px-6 pb-24">
+        <div className="hidden md:flex gap-3 md:gap-4 items-start">
+          {cols.map((colImages, colIdx) => (
+            <div key={colIdx} className="flex-1 flex flex-col gap-3 md:gap-4">
+              {colImages.map((src, rowIdx) => {
+                const globalIdx = colIdx * perCol + rowIdx;
+                return (
+                  <motion.div
+                    key={globalIdx}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-50px' }}
+                    transition={{ duration: 0.5, delay: colIdx * 0.05 }}
+                    onClick={() => openImage(globalIdx)}
+                    className="cursor-pointer overflow-hidden group relative"
+                  >
+                    <motion.div
+                      whileHover={{ scale: 1.03 }}
+                      transition={{ duration: 0.4, ease: 'easeOut' }}
+                    >
+                      <ImageWithFallback
+                        src={src}
+                        alt={`Print ${globalIdx + 1}`}
+                        className="w-full h-auto block"
+                        loading="lazy"
+                      />
+                    </motion.div>
+                    <motion.div
+                      className="absolute inset-0 bg-black/40"
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  </motion.div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+
+        {/* Masonry Grid — Mobile 2 cols */}
+        <div className="flex md:hidden gap-3 items-start">
+          {Array.from({ length: 2 }, (_, i) =>
+            artworks.slice(
+              i * Math.ceil(artworks.length / 2),
+              (i + 1) * Math.ceil(artworks.length / 2)
+            )
+          ).map((colImages, colIdx) => (
+            <div key={colIdx} className="flex-1 flex flex-col gap-3">
+              {colImages.map((src, rowIdx) => {
+                const globalIdx = colIdx * Math.ceil(artworks.length / 2) + rowIdx;
+                return (
+                  <motion.div
+                    key={globalIdx}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-50px' }}
+                    transition={{ duration: 0.5, delay: colIdx * 0.05 }}
+                    onClick={() => openImage(globalIdx)}
+                    className="cursor-pointer overflow-hidden group relative"
+                  >
+                    <ImageWithFallback
+                      src={src}
+                      alt={`Print ${globalIdx + 1}`}
+                      className="w-full h-auto block"
+                      loading="lazy"
+                    />
+                    <motion.div
+                      className="absolute inset-0 bg-black/40"
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  </motion.div>
+                );
+              })}
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Lightbox Modal */}
-      {selectedArtwork && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          onClick={() => setSelectedArtwork(null)}
-          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 md:p-6"
-        >
+      {/* Lightbox */}
+      <AnimatePresence>
+        {selected !== null && (
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-5xl"
+            key="lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            style={{ backgroundColor: 'rgba(0,0,0,0.97)' }}
+            onClick={close}
+            onKeyDown={handleKey}
+            tabIndex={0}
           >
-            {/* Close button */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setSelectedArtwork(null)}
-              className="absolute -top-12 right-0 text-white hover:text-accent transition-colors z-10"
+            {/* Close */}
+            <button
+              onClick={close}
+              className="absolute top-6 right-6 z-10 w-10 h-10 flex items-center justify-center rounded-full transition-colors"
+              style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
             >
-              <X size={32} strokeWidth={1.5} />
-            </motion.button>
+              <X size={20} strokeWidth={1.5} />
+            </button>
+
+            {/* Prev */}
+            <button
+              onClick={(e) => { e.stopPropagation(); prev(); }}
+              className="absolute left-4 md:left-6 z-10 w-10 h-10 flex items-center justify-center rounded-full transition-colors"
+              style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
+            >
+            
+            </button>
 
             {/* Image */}
-            <div className="aspect-[3/4] md:aspect-auto max-h-[80vh] bg-black overflow-hidden rounded-sm">
-              <ImageWithFallback
-                src={selectedArtwork.image}
-                alt={selectedArtwork.title}
-                className="w-full h-full object-contain"
-              />
-            </div>
-
-            {/* Title below image */}
             <motion.div
-              className="mt-6 md:mt-8 text-center"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
+              key={selected}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.25 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                width: '100%',
+                maxWidth: '860px',
+                padding: '0 64px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
             >
-              <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl mb-2">
-                {selectedArtwork.title}
-              </h2>
-              <p className="text-white/60 text-sm md:text-base">
-                {selectedArtwork.year} • {selectedArtwork.city}
+              <div style={{
+                maxHeight: '85vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <ImageWithFallback
+                  src={artworks[selected]}
+                  alt={`Print ${selected + 1}`}
+                  style={{
+                    maxHeight: '85vh',
+                    maxWidth: '100%',
+                    width: 'auto',
+                    height: 'auto',
+                    display: 'block',
+                  }}
+                />
+              </div>
+              <p style={{
+                color: 'rgba(255,255,255,0.3)',
+                fontSize: 11,
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                marginTop: '1rem',
+              }}>
+                {selected + 1} / {artworks.length}
               </p>
             </motion.div>
+
+            {/* Next */}
+            <button
+              onClick={(e) => { e.stopPropagation(); next(); }}
+              className="absolute right-4 md:right-6 z-10 w-10 h-10 flex items-center justify-center rounded-full transition-colors"
+              style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
+            >
+        
+            </button>
           </motion.div>
-        </motion.div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 }
