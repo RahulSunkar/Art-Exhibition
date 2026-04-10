@@ -1733,6 +1733,8 @@ export function Events() {
             onVideoPlay={(i: number) =>
               setPlayingVideoId(`audience-${i}-${nextEvent.voiceOfAudience[i].videoUrl.slice(0, 10)}`)
             }
+
+            
           />
         </motion.div>
       )}
