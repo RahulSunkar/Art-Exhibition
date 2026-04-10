@@ -90,6 +90,18 @@ export interface ProcessStep {
   image: string;
 }
 
+export interface MediaReview {
+  id: number;
+  source: string;
+  sourceShort: string;
+  title: string;
+  url: string;
+  excerpt: string;
+  accentColor: string;
+  stat?: string;
+  tag?: string;
+}
+
 export interface Event {
   id: number;
   title: string;
@@ -112,6 +124,8 @@ export interface Event {
   }[];
   curatorNote?: string;
   curatorVideo?: string;
+  curatorVideos?: string[];
+  curatorByline?: string;
   eventBites?: string[];
   chiefGuests?: Array<{ name: string; role: string; details?: string }>;
   setup?: {

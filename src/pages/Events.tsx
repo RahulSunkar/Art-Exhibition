@@ -2,11 +2,13 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import { events } from '../data/store';
+import { mediaReviews } from '../data/mediaReviews';
+import { MediaReviewGrid } from '../components/MediaReviewShowcase';
 import { useIsMobile } from '../components/ui/use-mobile';
 
 // ─── Shared design tokens ───────────────────────────────────────────────────
 const T = {
-  serif: "'Playfair Display', serif",
+  serif: "'Poppins', sans-serif",
   mono: "'DM Mono', monospace",
   white: '#ffffff',
   dim1: 'rgba(255,255,255,0.72)',
@@ -41,7 +43,7 @@ function getYouTubeThumbnail(videoUrl: string): string {
 
 // ─── CSS injected once ───────────────────────────────────────────────────────
 const GLOBAL_STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap');
 
   @keyframes scanGrain {
     0%,100% { transform: translate(0,0); }
@@ -135,6 +137,90 @@ const GLOBAL_STYLES = `
   .video-play-btn {
     transition: transform 0.3s cubic-bezier(.16,1,.3,1), background 0.25s, border-color 0.25s;
   }
+
+  .catalog-stage {
+    position: relative;
+    min-height: clamp(420px, 72vh, 860px);
+    perspective: 2200px;
+  }
+
+  .catalog-stage::before {
+    content: '';
+    position: absolute;
+    inset: 8% 10%;
+    border-radius: 28px;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.07), transparent 72%);
+    filter: blur(24px);
+    pointer-events: none;
+  }
+
+  .catalog-book {
+    position: relative;
+    min-height: inherit;
+    background: linear-gradient(145deg, rgba(18,18,18,0.98) 0%, rgba(8,8,8,0.94) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 32px 120px rgba(0,0,0,0.42);
+  }
+
+  .catalog-book::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent 12%, transparent 88%, rgba(255,255,255,0.03));
+    pointer-events: none;
+  }
+
+  .catalog-page-shell {
+    position: absolute;
+    inset: clamp(14px, 2vw, 22px);
+    border-radius: 20px;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    box-shadow: 0 26px 60px rgba(0,0,0,0.45);
+  }
+
+  .catalog-page-shell img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    background: #f5f0e8;
+  }
+
+  .catalog-page-shell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0,0,0,0.22), transparent 12%, transparent 88%, rgba(0,0,0,0.18));
+    pointer-events: none;
+  }
+
+  .catalog-spine {
+    position: absolute;
+    left: 50%;
+    top: 6%;
+    bottom: 6%;
+    width: 1px;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.14), transparent);
+    box-shadow: 0 0 22px rgba(255,255,255,0.08);
+    pointer-events: none;
+  }
+
+  .catalog-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    .catalog-stage {
+      min-height: 420px;
+    }
+  }
 `;
 
 // ─── Reusable tiny components ────────────────────────────────────────────────
@@ -151,14 +237,23 @@ const SectionLabel = ({ children, delay = 0 }: { children: string; delay?: numbe
   </motion.p>
 );
 
-const Rule = () => (
-  <motion.div
-    initial={{ scaleX: 0 }}
-    whileInView={{ scaleX: 1 }}
+const SectionTitle = ({ children }: { children: string }) => (
+  <motion.h2
+    initial={{ opacity: 0, y: 24 }}
+    whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
-    transition={{ duration: .9, ease: [.16, 1, .3, 1] }}
-    style={{ height: 1, background: 'rgba(255,255,255,.1)', transformOrigin: 'left', marginBottom: '3rem' }}
-  />
+    transition={{ duration: 0.7 }}
+    style={{
+      fontFamily: T.serif,
+      fontSize: 'clamp(2.4rem, 5vw, 4.8rem)',
+      lineHeight: 0.95,
+      letterSpacing: '-0.04em',
+      color: '#ffffff',
+      margin: '0 0 2rem',
+    }}
+  >
+    {children}
+  </motion.h2>
 );
 
 // ─── PDF Catalog Viewer ───────────────────────────────────────────────────────
@@ -167,9 +262,16 @@ function CatalogViewer({ catalog }: { catalog: { pdfUrl?: string; image?: string
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [pageImage, setPageImage] = useState<string | null>(null);
+  const [turnDirection, setTurnDirection] = useState(1);
+  const stageRef = useRef<HTMLDivElement>(null);
   const pdfRef = useRef<any>(null);
   const renderTaskRef = useRef<any>(null);
+  const pageRef = useRef(1);
+
+  useEffect(() => {
+    pageRef.current = pageNum;
+  }, [pageNum]);
 
   useEffect(() => {
     if (!catalog.pdfUrl) {
@@ -184,6 +286,7 @@ function CatalogViewer({ catalog }: { catalog: { pdfUrl?: string; image?: string
         setLoading(false);
         return;
       }
+
       pdfjsLib.GlobalWorkerOptions.workerSrc =
         'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -204,8 +307,7 @@ function CatalogViewer({ catalog }: { catalog: { pdfUrl?: string; image?: string
       loadPdf();
     } else {
       const script = document.createElement('script');
-      script.src =
-        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
       script.onload = loadPdf;
       script.onerror = () => {
         setError(true);
@@ -213,46 +315,70 @@ function CatalogViewer({ catalog }: { catalog: { pdfUrl?: string; image?: string
       };
       document.head.appendChild(script);
     }
+
+    return () => {
+      renderTaskRef.current?.cancel?.();
+    };
   }, [catalog.pdfUrl]);
 
   const renderPage = (num: number, pdf?: any) => {
     const doc = pdf ?? pdfRef.current;
-    if (!doc || !canvasRef.current) return;
+    if (!doc || !stageRef.current) return;
 
-    // Cancel any in-progress render
-    if (renderTaskRef.current) {
-      renderTaskRef.current.cancel();
-    }
-
+    renderTaskRef.current?.cancel?.();
     setLoading(true);
+
     doc.getPage(num).then((page: any) => {
-      const container = canvasRef.current!.parentElement!;
-      const scale = Math.min(
-        container.clientWidth / page.getViewport({ scale: 1 }).width,
-        (window.innerHeight * 0.75) / page.getViewport({ scale: 1 }).height
-      );
-      const viewport = page.getViewport({ scale: Math.max(scale, 1.2) });
-      const canvas = canvasRef.current!;
-      const ctx = canvas.getContext('2d')!;
+      const baseViewport = page.getViewport({ scale: 1 });
+      const stageWidth = Math.max(stageRef.current!.clientWidth - 48, 280);
+      const stageHeight = Math.min(window.innerHeight * 0.7, 880);
+      const scale = Math.min(stageWidth / baseViewport.width, stageHeight / baseViewport.height);
+      const viewport = page.getViewport({ scale: Math.max(scale, 0.85) });
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      if (!ctx) {
+        setError(true);
+        setLoading(false);
+        return;
+      }
+
       canvas.height = viewport.height;
       canvas.width = viewport.width;
 
       const task = page.render({ canvasContext: ctx, viewport });
       renderTaskRef.current = task;
+
       task.promise
-        .then(() => setLoading(false))
-        .catch(() => setLoading(false));
+        .then(() => {
+          setPageImage(canvas.toDataURL('image/jpeg', 0.96));
+          setPageNum(num);
+          setLoading(false);
+        })
+        .catch((renderError: { name?: string }) => {
+          if (renderError?.name !== 'RenderingCancelledException') {
+            setError(true);
+          }
+          setLoading(false);
+        });
     });
   };
 
   const goTo = (dir: number) => {
-    const next = Math.max(1, Math.min(totalPages, pageNum + dir));
-    if (next === pageNum) return;
-    setPageNum(next);
+    const next = Math.max(1, Math.min(totalPages, pageRef.current + dir));
+    if (next === pageRef.current || loading) return;
+    setTurnDirection(dir > 0 ? 1 : -1);
     renderPage(next);
   };
 
-  // Fallback: image only
+  useEffect(() => {
+    if (!pdfRef.current) return;
+
+    const handleResize = () => renderPage(pageRef.current);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [pageImage]);
+
   if (!catalog.pdfUrl && catalog.image) {
     return (
       <div style={{
@@ -267,16 +393,19 @@ function CatalogViewer({ catalog }: { catalog: { pdfUrl?: string; image?: string
 
   return (
     <div>
-      {/* ── Controls bar ── */}
       <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        marginBottom: '1.25rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '1rem',
+        marginBottom: '1.4rem',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <button
             className="pdf-nav-btn"
             onClick={() => goTo(-1)}
-            disabled={pageNum === 1}
+            disabled={pageNum === 1 || loading}
             aria-label="Previous page"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -285,7 +414,7 @@ function CatalogViewer({ catalog }: { catalog: { pdfUrl?: string; image?: string
           </button>
 
           <span className="label" style={{ margin: 0, letterSpacing: '.3em' }}>
-            {loading ? 'Loading…' : `Page ${pageNum} / ${totalPages}`}
+            {loading ? 'Turning page…' : `Page ${pageNum} / ${totalPages}`}
           </span>
 
           <button
@@ -305,58 +434,128 @@ function CatalogViewer({ catalog }: { catalog: { pdfUrl?: string; image?: string
             href={catalog.pdfUrl}
             download
             style={{
-              fontSize: 9, color: 'rgba(255,255,255,0.3)',
-              letterSpacing: '.25em', textTransform: 'uppercase',
-              textDecoration: 'none', transition: 'color .2s',
+              fontSize: 16,
+              color: 'rgb(255, 255, 255)',
+              letterSpacing: '.25em',
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+              transition: 'color .2s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}
+            onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}
           >
             Download PDF ↓
           </a>
         )}
       </div>
 
-      {/* ── Canvas area ── */}
-      <div style={{
-        background: '#0e0e0e',
-        border: T.border,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '65vh',
-        overflow: 'hidden',
-        position: 'relative',
-      }}>
-        {error ? (
-          <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.2)', padding: '4rem' }}>
-            <div style={{ fontSize: 40, marginBottom: '1rem' }}>⊞</div>
-            <p className="label">Unable to load PDF</p>
-          </div>
-        ) : (
-          <>
-            {loading && (
-              <div style={{
-                position: 'absolute', inset: 0, display: 'flex',
-                alignItems: 'center', justifyContent: 'center', zIndex: 2,
-              }}>
-                <span className="label" style={{ color: 'rgba(255,255,255,0.25)' }}>Loading…</span>
-              </div>
-            )}
-            <canvas
-              ref={canvasRef}
-              style={{
-                maxWidth: '100%',
-                display: 'block',
-                opacity: loading ? 0.3 : 1,
-                transition: 'opacity 0.3s',
-              }}
-            />
-          </>
-        )}
+      <div ref={stageRef} className="catalog-stage">
+        <div className="catalog-book">
+          <div className="catalog-spine" />
+          {error ? (
+            <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.2)', padding: '4rem' }}>
+              <div style={{ fontSize: 40, marginBottom: '1rem' }}>⊞</div>
+              <p className="label">Unable to load PDF</p>
+            </div>
+          ) : (
+            <>
+              <AnimatePresence initial={false} mode="wait" custom={turnDirection}>
+                {pageImage && (
+                  <motion.div
+                    key={pageNum}
+                    className="catalog-page-shell"
+                    custom={turnDirection}
+                    initial={(dir) => ({
+                      rotateY: dir > 0 ? -88 : 88,
+                      x: dir > 0 ? 40 : -40,
+                      opacity: 0.24,
+                    })}
+                    animate={{
+                      rotateY: 0,
+                      x: 0,
+                      opacity: 1,
+                      transition: { duration: 0.78, ease: [0.22, 1, 0.36, 1] },
+                    }}
+                    exit={(dir) => ({
+                      rotateY: dir > 0 ? 88 : -88,
+                      x: dir > 0 ? -36 : 36,
+                      opacity: 0.18,
+                      transition: { duration: 0.52, ease: [0.55, 0, 0.2, 1] },
+                    })}
+                    style={{ transformOrigin: turnDirection > 0 ? 'left center' : 'right center' }}
+                  >
+                    <img src={pageImage} alt={`Catalog page ${pageNum}`} />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        right: 18,
+                        bottom: 16,
+                        padding: '0.45rem 0.8rem',
+                        borderRadius: 999,
+                        background: 'rgba(5,5,5,0.56)',
+                        color: '#ffffff',
+                        fontSize: 10,
+                        letterSpacing: '0.16em',
+                        textTransform: 'uppercase',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                      }}
+                    >
+                      Page {pageNum}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {loading && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 3,
+                  }}
+                >
+                  <span className="label" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                    Turning page…
+                  </span>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
-      {/* ── Keyboard hint ── */}
+      {/* <div className="catalog-meta-grid" style={{ marginTop: '1.5rem' }}>
+        {[
+          { label: 'Format', value: 'Digital exhibition catalog' },
+          { label: 'Experience', value: 'Page-turn browsing with keyboard controls' },
+          { label: 'Access', value: 'Downloadable PDF archive' },
+        ].map((item) => (
+          <div
+            key={item.label}
+            style={{
+              padding: '1rem 1.1rem',
+              border: T.border,
+              background: 'rgba(255,255,255,0.03)',
+            }}
+          >
+            <p className="label" style={{ marginBottom: '0.55rem' }}>{item.label}</p>
+            <p
+              style={{
+                margin: 0,
+                color: 'rgba(255,255,255,0.72)',
+                lineHeight: 1.7,
+                fontSize: 13,
+              }}
+            >
+              {item.value}
+            </p>
+          </div>
+        ))}
+      </div> */}
+
       <div style={{
         display: 'flex', justifyContent: 'center', marginTop: '1rem', gap: '1.5rem',
       }}>
@@ -688,7 +887,7 @@ function VideoItem({
   );
 }
 
-// ─── Voice of Audience Grid ─────────────────────────────────────────────────
+// ─── Voice of the Audience Grid ─────────────────────────────────────────────────
 function VoiceOfAudienceGrid({
   videos,
   activaVideoId,
@@ -696,7 +895,7 @@ function VoiceOfAudienceGrid({
 }: {
   videos: Array<{ videoUrl: string }>;
   activaVideoId?: string | null;
-  onVideoPlay?: () => void;
+  onVideoPlay?: (index: number) => void;
 }) {
   const [showAll, setShowAll] = useState(false);
   const visibleCount = showAll ? videos.length : 4;
@@ -771,7 +970,7 @@ function AudienceVideoItem({
   videoUrl: string;
   i: number;
   activaVideoId?: string | null;
-  onVideoPlay?: () => void;
+  onVideoPlay?: (index: number) => void;
 }) {
   const [playing, setPlaying] = useState(false);
   const thumbnail = getYouTubeThumbnail(videoUrl);
@@ -782,7 +981,7 @@ function AudienceVideoItem({
       return; // Another video is playing
     }
     setPlaying(true);
-    onVideoPlay?.();
+    onVideoPlay?.(i);
   };
 
   return (
@@ -913,16 +1112,19 @@ function AudienceVideoItem({
 // ─── Curator Note Section (Responsive) ─────────────────────────────────────
 function CuratorNoteSection({
   curatorNote,
-  curatorVideo,
+  curatorVideos,
+  curatorByline,
   activaVideoId,
   onVideoPlay,
 }: {
   curatorNote: string;
-  curatorVideo?: string;
+  curatorVideos?: string[];
+  curatorByline?: string;
   activaVideoId?: string | null;
-  onVideoPlay?: () => void;
+  onVideoPlay?: (videoUrl: string) => void;
 }) {
   const isMobile = useIsMobile();
+  const visibleVideos = (curatorVideos ?? []).filter(Boolean);
 
   return (
     <div className="section" style={{ padding: isMobile ? '3rem 1.5rem 0' : '5rem 5rem 0' }}>
@@ -939,66 +1141,284 @@ function CuratorNoteSection({
         }}
       />
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-        gap: isMobile ? '3rem' : '5rem',
-        alignItems: 'start',
-      }}>
-        {/* Left: curator note text */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <span className="label" style={{ display: 'block', marginBottom: '2rem' }}>
-            Curator's Note
-          </span>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        style={{ marginBottom: visibleVideos.length > 0 ? '2.4rem' : 0 }}
+      >
+          <SectionTitle>Curator&apos;s Note</SectionTitle>
 
-          <div style={{
-            fontFamily: T.serif,
-            fontSize: 'clamp(3rem,6vw,5rem)',
-            lineHeight: 0.8,
-            color: 'rgba(255,255,255,.06)',
-            fontWeight: 900,
-            marginBottom: '1rem',
-            userSelect: 'none',
-          }}>
-            "
-          </div>
+        <div style={{
+          fontFamily: T.serif,
+          fontSize: 'clamp(3rem,6vw,5rem)',
+          lineHeight: 0.8,
+          color: 'rgba(255,255,255,.06)',
+          fontWeight: 900,
+          marginBottom: '1rem',
+          userSelect: 'none',
+        }}>
+          "
+        </div>
 
-          <blockquote style={{
-            fontFamily: T.serif,
-            fontSize: 'clamp(1.1rem,1.8vw,1.5rem)',
-            lineHeight: 1.7,
-            fontWeight: 400,
-            fontStyle: 'italic',
-            color: 'rgba(255,255,255,.85)',
-            borderLeft: '2px solid rgba(255,255,255,.18)',
-            paddingLeft: '2rem',
-            margin: 0,
-          }}>
-            {curatorNote}
-          </blockquote>
-        </motion.div>
+        <blockquote style={{
+          fontFamily: T.serif,
+          fontSize: 'clamp(1.2rem,2vw,1.65rem)',
+          lineHeight: 1.7,
+          fontWeight: 400,
+          fontStyle: 'italic',
+          color: 'rgba(255,255,255,.85)',
+          borderLeft: '2px solid rgba(255,255,255,.18)',
+          paddingLeft: '2rem',
+          margin: 0,
+          maxWidth: 980,
+        }}>
+          {curatorNote}
+        </blockquote>
 
-        {/* Right: curator video with play button */}
-        {curatorVideo && (
-          <CuratorVideoPlayer
-            videoUrl={curatorVideo}
-            activaVideoId={activaVideoId}
-            onVideoPlay={onVideoPlay}
-          />
+        {curatorByline && (
+          <p
+            style={{
+              margin: '1.2rem 0 0',
+              fontSize: 16,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              color: 'rgb(255, 255, 255)',
+            }}
+          >
+            — {curatorByline}
+          </p>
         )}
+      </motion.div>
+
+      {visibleVideos.length > 0 && (
+  <div
+    style={{
+      display: 'grid',
+      gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+      gap: '1.4rem',
+      alignItems: 'start',
+    }}
+  >
+    {visibleVideos.map((videoUrl, index) => (
+      <div key={`${videoUrl}-${index}`}>
+        {/* 16:9 Aspect Ratio Wrapper */}
+        <div
+          style={{
+            position: 'relative',
+            width: '100%',
+            paddingTop: '56.25%', /* 9/16 = 56.25% */
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+            }}
+          >
+            <CuratorVideoPlayer
+              videoUrl={videoUrl}
+              activaVideoId={activaVideoId}
+              onVideoPlay={() => onVideoPlay?.(videoUrl)}
+            />
+          </div>
+        </div>
       </div>
+    ))}
+  </div>
+)}
     </div>
+  );
+}
+
+function HeroReviewSpotlight({
+  reviews,
+}: {
+  reviews: Array<{
+    title: string;
+    author: string;
+    review: string;
+  }>;
+}) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (reviews.length <= 1) return;
+
+    const timer = window.setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % reviews.length);
+    }, 5000);
+
+    return () => window.clearInterval(timer);
+  }, [reviews.length]);
+
+  const activeReview = reviews[activeIndex];
+
+  if (!activeReview) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 36, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+      style={{
+        width: 'min(100%, 900px)',
+        margin: '0 auto',
+        padding: 'clamp(1rem, 2vw, 1.25rem)',
+        borderRadius: 30,
+        // background: 'rgba(255,255,255,0.03)',
+        // border: '1px solid rgba(255,255,255,0.08)',
+        // boxShadow: '0 30px 100px rgba(0,0,0,0.32)',
+        // backdropFilter: 'blur(18px)',
+      }}
+    >
+      <div
+        style={{
+          position: 'relative',
+          borderRadius: 24,
+          padding: 'clamp(1.35rem, 3vw, 2.4rem)',
+          // border: '1px solid rgba(255,255,255,0.12)',
+          // background: 'linear-gradient(145deg, rgba(10,10,10,0.76) 0%, rgba(26,26,26,0.55) 100%)',
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            inset: 'auto -8% -35% auto',
+            width: 220,
+            height: 220,
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.08)',
+            filter: 'blur(34px)',
+            pointerEvents: 'none',
+          }}
+        />
+
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: '0.9rem 1rem',
+            marginBottom: '1.2rem',
+          }}
+        >
+          {/* <span
+            style={{
+              fontSize: 11,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: 'rgba(255,255,255,0.45)',
+            }}
+          >
+            Voice of the Audience
+          </span> */}
+          <span
+            style={{
+              padding: '0.42rem 0.85rem',
+              borderRadius: 999,
+              fontSize: 10,
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              color: '#ffffff',
+              border: '1px solid rgba(255,255,255,0.18)',
+              background: 'rgba(255,255,255,0.07)',
+            }}
+          >
+             Voice of the Audience
+          </span>
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeIndex}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.5 }}
+          >
+            <p
+              style={{
+                fontFamily: T.serif,
+                fontSize: 'clamp(1.4rem, 2.6vw, 2.3rem)',
+                lineHeight: 1.5,
+                color: 'rgba(255,255,255,0.86)',
+                fontStyle: 'italic',
+                margin: 0,
+              }}
+            >
+              "{activeReview.review}"
+            </p>
+
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                gap: '0.85rem 1rem',
+                marginTop: '1.4rem',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 11,
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.46)',
+                }}
+              >
+                — {activeReview.author}
+              </span>
+              <span
+                style={{
+                  fontSize: 11,
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.28)',
+                }}
+              >
+                {activeReview.title}
+              </span>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.7rem',
+            marginTop: '1.5rem',
+          }}
+        >
+          {reviews.map((review, index) => (
+            <button
+              key={`${review.author}-${index}`}
+              onClick={() => setActiveIndex(index)}
+              aria-label={`Show visitor review ${index + 1}`}
+              style={{
+                width: index === activeIndex ? 30 : 10,
+                height: 10,
+                borderRadius: 999,
+                border: 'none',
+                background: index === activeIndex ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.22)',
+                cursor: 'pointer',
+                transition: 'all 0.25s ease',
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
 // ─── Main component ──────────────────────────────────────────────────────────
 export function Events() {
   const nextEvent = events.find((e) => e.type === 'Exhibition') ?? events[0];
+  const isMobile = useIsMobile();
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -1009,21 +1429,14 @@ export function Events() {
 
   // Video management - only one video plays at a time
   const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
-
-  // Hero reviews carousel - autoplay testimonials
-  const [heroCarouselIndex, setHeroCarouselIndex] = useState(0);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const eventMeta = [
+    nextEvent?.type,
+    nextEvent?.location,
+    nextEvent?.date,
+  ].filter(Boolean) as string[];
   const heroReviews = nextEvent?.reviewsAndPics ?? [];
-
-  // Auto-cycle through reviews every 6 seconds
-  useEffect(() => {
-    if (heroReviews.length <= 1) return;
-
-    const interval = setInterval(() => {
-      setHeroCarouselIndex((prev) => (prev + 1) % heroReviews.length);
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, [heroReviews.length]);
+  const visibleReviews = showAllReviews ? heroReviews : heroReviews.slice(0, 4);
 
   // Keyboard navigation for PDF
   useEffect(() => {
@@ -1050,7 +1463,7 @@ export function Events() {
         ref={heroRef}
         style={{
           position: 'relative',
-          height: '92vh',
+          height: isMobile ? '100svh' : '95vh',
           display: 'flex',
           alignItems: 'flex-end',
           overflow: 'hidden',
@@ -1077,152 +1490,64 @@ export function Events() {
           </motion.div>
         )}
 
-        {/* Hero carousel - cycling testimonials */}
-        {heroReviews.length > 0 && (
-          <motion.div
-           style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '320px',
-              maxHeight: '280px',
-              borderRadius: '12px',
-              overflow: 'hidden',
-              border: T.border,
-              zIndex: 2,
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)',
-              padding: '1.5rem',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-            initial={{ opacity: 0, scale: 0.8, y: 50 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={heroCarouselIndex}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.5 }}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.75rem',
-                  flex: 1,
-                }}
-              >
-                {/* Star rating */}
-                <div style={{ display: 'flex', gap: '4px' }}>
-                  {Array.from({ length: heroReviews[heroCarouselIndex]?.rating || 5 }).map((_, idx) => (
-                    <span key={idx} style={{ fontSize: '0.9rem', color: 'rgba(255, 215, 0, 0.9)' }}>
-                      ★
-                    </span>
-                  ))}
-                </div>
-
-                {/* Review title */}
-                <h4
-                  style={{
-                    fontFamily: T.serif,
-                    fontSize: '0.95rem',
-                    fontWeight: 600,
-                    color: 'rgba(255,255,255,0.95)',
-                    margin: 0,
-                  }}
-                >
-                  {heroReviews[heroCarouselIndex]?.title}
-                </h4>
-
-                {/* Review text */}
-                <p
-                  style={{
-                    fontSize: '0.8rem',
-                    lineHeight: 1.5,
-                    color: 'rgba(255,255,255,0.75)',
-                    margin: 0,
-                    fontStyle: 'italic',
-                    flex: 1,
-                  }}
-                >
-                  "{heroReviews[heroCarouselIndex]?.review}"
-                </p>
-
-                {/* Author */}
-                <p
-                  style={{
-                    fontSize: '0.75rem',
-                    fontWeight: 500,
-                    color: 'rgba(255,255,255,0.65)',
-                    margin: 0,
-                    marginTop: '0.5rem',
-                  }}
-                >
-                  — {heroReviews[heroCarouselIndex]?.author}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Indicator dots */}
-            <div
-              style={{
-                display: 'flex',
-                gap: '6px',
-                marginTop: '1rem',
-                justifyContent: 'center',
-              }}
-            >
-              {heroReviews.map((_, idx) => (
-                <motion.div
-                  key={idx}
-                  style={{
-                    width: idx === heroCarouselIndex ? '12px' : '6px',
-                    height: '6px',
-                    borderRadius: '3px',
-                    background:
-                      idx === heroCarouselIndex
-                        ? 'rgba(255, 215, 0, 0.8)'
-                        : 'rgba(255, 255, 255, 0.2)',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => setHeroCarouselIndex(idx)}
-                  animate={{ width: idx === heroCarouselIndex ? '12px' : '6px' }}
-                  transition={{ duration: 0.3 }}
-                  whileHover={{ scale: 1.2 }}
-                />
-              ))}
-            </div>
-          </motion.div>
-        )}
+        <div
+          style={{
+            position: 'absolute',
+            top: isMobile ? '30%' : '80%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 'min(92vw, 980px)',
+            zIndex: 2,
+            pointerEvents: 'auto',
+          }}
+        >
+          <HeroReviewSpotlight reviews={heroReviews} />
+        </div>
 
         {/* Hero text */}
-        <motion.div
+        {/* <motion.div
           style={{
             position: 'relative',
             zIndex: 1,
-            padding: '0 5rem 5rem',
+            padding: isMobile ? '0 1.5rem 2rem' : '0 5rem 4rem',
             width: '100%',
             opacity: heroOpacity,
           }}
         >
-          {/* Top badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            style={{ marginBottom: '2.5rem' }}
-          >
-            <span className="pill"></span>
-            {nextEvent?.type && (
-              <span className="pill" style={{ marginLeft: 8 }}>
-                {nextEvent.type}
-              </span>
-            )}
-          </motion.div>
+          <div style={{ maxWidth: isMobile ? '100%' : '58rem' }}>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '0.6rem',
+                marginBottom: '1.2rem',
+              }}
+            >
+              {eventMeta.map((item) => (
+                <span key={item} className="pill">
+                  {item}
+                </span>
+              ))}
+            </motion.div>
 
-          <div style={{ maxWidth: '85%' }}>
+            <motion.h1
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.16 }}
+              style={{
+                fontFamily: T.serif,
+                fontSize: 'clamp(3.4rem, 8vw, 7.2rem)',
+                lineHeight: 0.92,
+                letterSpacing: '-0.04em',
+                color: '#ffffff',
+                marginBottom: '1rem',
+              }}
+            >
+              {nextEvent?.title}
+            </motion.h1>
 
             {nextEvent?.subtitle && (
               <motion.p
@@ -1231,10 +1556,10 @@ export function Events() {
                 transition={{ duration: 0.8, delay: 0.3 }}
                 style={{
                   fontFamily: T.serif,
-                  fontSize: 'clamp(1.1rem,2.4vw,1.9rem)',
+                  fontSize: 'clamp(1.15rem,2.4vw,1.9rem)',
                   fontStyle: 'italic',
-                  color: 'rgba(255,255,255,.75)',
-                  marginBottom: '1.5rem',
+                  color: 'rgba(255,255,255,.82)',
+                  marginBottom: '1rem',
                   lineHeight: 1.35,
                 }}
               >
@@ -1252,14 +1577,14 @@ export function Events() {
                   lineHeight: 1.9,
                   fontWeight: 300,
                   color: T.dim1,
-                  maxWidth: 540,
+                  maxWidth: 640,
                 }}
               >
                 {nextEvent.summary}
               </motion.p>
             )}
           </div>
-        </motion.div>
+        </motion.div> */}
 
         {/* Scroll cue */}
         <motion.div
@@ -1268,8 +1593,8 @@ export function Events() {
           transition={{ delay: 1.5, duration: 1 }}
           style={{
             position: 'absolute',
-            bottom: '2.5rem',
-            right: '5rem',
+            bottom: isMobile ? '1.25rem' : '2.5rem',
+            right: isMobile ? '1.5rem' : '5rem',
             display: 'flex',
             alignItems: 'center',
             gap: 10,
@@ -1291,9 +1616,10 @@ export function Events() {
       {nextEvent?.curatorNote && (
         <CuratorNoteSection
           curatorNote={nextEvent.curatorNote}
-          curatorVideo={nextEvent.curatorVideo}
+          curatorVideos={nextEvent.curatorVideos ?? (nextEvent.curatorVideo ? [nextEvent.curatorVideo] : [])}
+          curatorByline={nextEvent.curatorByline}
           activaVideoId={playingVideoId}
-          onVideoPlay={() => setPlayingVideoId(`curator-${nextEvent.curatorVideo?.slice(0, 10) || ''}`)}
+          onVideoPlay={(videoUrl) => setPlayingVideoId(`curator-${videoUrl.slice(0, 10)}`)}
         />
       )}
 
@@ -1321,7 +1647,7 @@ export function Events() {
             }}
           />
 
-          <SectionLabel>Catalog &amp; Publications</SectionLabel>
+          <SectionTitle>Catalogue</SectionTitle>
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1332,6 +1658,8 @@ export function Events() {
           </motion.div>
         </motion.div>
       )}
+
+   
 
       {/* ══════════════════════════════════════════════════════════════════
            PERFORMANCE VIDEOS — thumbnail → inline YouTube (like Films)
@@ -1357,7 +1685,7 @@ export function Events() {
             }}
           />
 
-          <SectionLabel>Performance Videos</SectionLabel>
+          <SectionTitle>Live Performance</SectionTitle>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
             {nextEvent.performanceVideos.map((v, i) => (
@@ -1370,11 +1698,12 @@ export function Events() {
               />
             ))}
           </div>
+          
         </motion.div>
       )}
 
       {/* ══════════════════════════════════════════════════════════════════
-           VOICE OF AUDIENCE
+           Voice of the Audience
       ══════════════════════════════════════════════════════════════════ */}
       {(nextEvent?.voiceOfAudience ?? []).length > 0 && (
         <motion.div
@@ -1397,7 +1726,7 @@ export function Events() {
             }}
           />
 
-          <SectionLabel>Voice of Audience</SectionLabel>
+          <SectionTitle>Voice of the Audience</SectionTitle>
 
           <VoiceOfAudienceGrid
             videos={nextEvent.voiceOfAudience}
@@ -1405,6 +1734,8 @@ export function Events() {
             onVideoPlay={(i: number) =>
               setPlayingVideoId(`audience-${i}-${nextEvent.voiceOfAudience[i].videoUrl.slice(0, 10)}`)
             }
+
+            
           />
         </motion.div>
       )}
@@ -1433,14 +1764,14 @@ export function Events() {
             }}
           />
 
-          <SectionLabel>Visitor Reviews & Testimonials</SectionLabel>
-
+          <SectionTitle>Thoughts & Reviews</SectionTitle>
+           
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '2rem',
+            gap: '1.5rem',
           }}>
-            {nextEvent.reviewsAndPics.map((review, i) => (
+            {visibleReviews.map((review, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 30 }}
@@ -1448,43 +1779,20 @@ export function Events() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 style={{
-                  padding: '2rem',
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
-                  border: T.border,
-                  borderRadius: '8px',
+                  padding: '1.75rem 0 0',
+                  background: 'transparent',
+                  borderTop: '1px solid rgba(255,255,255,0.1)',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '1rem',
+                  gap: '0.9rem',
                 }}
               >
-                {/* Star rating */}
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  {Array.from({ length: review.rating || 5 }).map((_, idx) => (
-                    <span key={idx} style={{ fontSize: '1.2rem' }}>
-                      ★
-                    </span>
-                  ))}
-                </div>
-
-                {/* Review title */}
-                <h4
-                  style={{
-                    fontFamily: T.serif,
-                    fontSize: '1.1rem',
-                    fontWeight: 600,
-                    color: 'rgba(255,255,255,0.95)',
-                    margin: 0,
-                  }}
-                >
-                  {review.title}
-                </h4>
-
-                {/* Review text */}
                 <p
                   style={{
-                    fontSize: '0.95rem',
-                    lineHeight: 1.6,
-                    color: 'rgba(255,255,255,0.7)',
+                    fontFamily: T.serif,
+                    fontSize: 'clamp(1.1rem, 1.8vw, 1.45rem)',
+                    lineHeight: 1.75,
+                    color: 'rgba(255,255,255,0.78)',
                     margin: 0,
                     flex: 1,
                     fontStyle: 'italic',
@@ -1493,34 +1801,48 @@ export function Events() {
                   "{review.review}"
                 </p>
 
-                {/* Author */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.5rem' }}>
-                  {review.image && (
-                    <img
-                      src={review.image}
-                      alt={review.author}
-                      style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '50%',
-                        objectFit: 'cover',
-                        border: '1px solid rgba(255,255,255,0.2)',
-                      }}
-                    />
-                  )}
-                  <span
-                    style={{
-                      fontSize: '0.9rem',
-                      fontWeight: 500,
-                      color: 'rgba(255,255,255,0.8)',
-                    }}
-                  >
-                    — {review.author}
-                  </span>
-                </div>
+                <p
+                  style={{
+                    fontSize: 11,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(255,255,255,0.45)',
+                    margin: 0,
+                  }}
+                >
+                  — {review.author}
+                </p>
               </motion.div>
             ))}
           </div>
+
+          {heroReviews.length > 4 && (
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}
+            >
+              <button
+                onClick={() => setShowAllReviews((prev) => !prev)}
+                style={{
+                  padding: '14px 28px',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: T.border,
+                  color: 'rgba(255,255,255,0.78)',
+                  fontFamily: T.mono,
+                  fontSize: 11,
+                  letterSpacing: '.18em',
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s ease',
+                }}
+              >
+                {showAllReviews ? 'Show Less' : 'Show More'}
+              </button>
+            </motion.div>
+          )}
         </motion.div>
       )}
 
@@ -1548,9 +1870,9 @@ export function Events() {
           Explore
         </div>
 
-        <span className="label" style={{ display: 'block', marginBottom: '1.5rem' }}>
-          Connect the Dots
-        </span>
+        <div style={{ maxWidth: 720, margin: '0 auto 1.5rem' }}>
+          <SectionTitle>Explore</SectionTitle>
+        </div>
         <p style={{
           fontFamily: T.serif,
           fontSize: 'clamp(1rem,1.8vw,1.35rem)',
@@ -1577,7 +1899,7 @@ export function Events() {
               <motion.div
                 whileHover={{
                   background: 'rgba(255,255,255,.06)',
-                  borderColor: 'rgba(255,255,255,.22)',
+                  borderColor: 'rgb(255, 255, 255)',
                 }}
                 transition={{ duration: 0.2 }}
                 style={{
@@ -1588,8 +1910,8 @@ export function Events() {
                 }}
               >
                 <span style={{
-                  fontSize: 10,
-                  fontWeight: 500,
+                  fontSize: 18,
+                  fontWeight: 800,
                   letterSpacing: '.25em',
                   textTransform: 'uppercase',
                   color: T.dim2,

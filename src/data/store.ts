@@ -11,6 +11,7 @@ import type {
 
 //Hero Video
 import heroVideo from './hero_video.mp4';
+import eventCatalogCover from './EventData/poster_page-0001.jpg';
 
 //Films Behind the scenes pics
 
@@ -57,6 +58,20 @@ import  Image15 from "./Prints/_MG_7096.jpg"
 import  Image16 from "./Prints/_MG_7099.jpg"
 import  Image17 from "./Prints/_MG_7102.jpg"
 import  Image18 from "./Prints/_MG_7106.jpg"
+import  Image19 from "./Prints/img20260301_21384670.jpg"
+import  Image20 from "./Prints/img20260301_21390740.jpg"
+import Image21 from "./Prints/img20260301_21405188.jpg"
+import Image22 from "./Prints/img20260301_21430439.jpg"
+import Image23 from "./Prints/img20260301_21432968.jpg"
+import Image24 from "./Prints/img20260301_21462558.jpg"
+import Image25 from "./Prints/img20260301_21464608.jpg"
+import Image26 from "./Prints/img20260301_21505561.jpg"
+import Image27 from "./Prints/img20260301_21552459.jpg"
+import Image28 from "./Prints/img20260301_21580630.jpg"
+import Image29 from "./Prints/img20260301_21592970.jpg"
+import Image30 from "./Prints/img20260301_22012747.jpg"
+import Image31 from "./Prints/img20260301_22030648.jpg"
+import Image32 from "./Prints/img20260301_22054456.jpg"
 
 import LivePerformanceposter from './Prints/_MG_7058.jpg';
 
@@ -68,6 +83,7 @@ const Dushor_Trailer = 'https://www.youtube.com/embed/74fDOTXxVg4';
 const TremorsTrailer = 'https://www.youtube.com/embed/S0-et8N_FPM';
 const Dr_Boominathan_Performance = 'https://www.youtube.com/embed/BFuHZIS9E1Q';
 const curator_notes_video ='https://www.youtube.com/embed/SKI9xEtVZy4';
+const curator_notes_video2 = 'https://www.youtube.com/embed/8n33vEKe7zA';
 
 
 // Voice of audience videos
@@ -82,224 +98,11 @@ const reviewVideo5 = 'https://www.youtube.com/embed/KXIixLTzmCs';
 
 // ARTWORKS - Add/Edit artworks here
 
-export const artworks: Artwork[] = [
-  {
-    id: 1,
-    title: '',
-    artist: 'Collective Work',
-    year: '2026',
-    medium: 'Mixed Media Photography',
-    city: 'Chennai',
-    theme: 'Memory',
-    image: Image1,
-    description: 'An exploration of fragmented memory through layered photographic techniques.',
-    process: 'Created using double exposure of street scenes and portrait photography, this series maps the psychological geography of displacement.'
-  },
-  {
-    id: 2,
-    title: '',
-    artist: 'Various Artists',
-    year: '2026',
-    medium: 'Documentary Photography',
-    city: 'Delhi',
-    theme: 'Identity',
-    image: Image15 ,
-    description: 'Portraits of individuals whose stories have been systematically erased from official narratives.',
-    process: 'Shot on film with intentional grain to evoke analog memory and historical documentation.'
-  },
-  {
-    id: 3,
-    title: '',
-    artist: 'Installation',
-    year: '2026',
-    medium: 'Site-Specific Installation',
-    city: 'Chennai',
-    theme: 'Space',
-    image: Image5,
-    description: 'The gallery space itself becomes a living archive of absence and presence.',
-    process: 'Architectural photography combined with projection mapping creates immersive spatial narratives.'
-  },
-  {
-    id: 4,
-    title: '',
-    artist: 'Collective Work',
-    year: '2026',
-    medium: 'Street Photography',
-    city: 'Delhi',
-    theme: 'Place',
-    image: Image17,
-    description: 'Intersection points in the urban landscape where stories converge and diverge.',
-    process: 'Long exposure night photography capturing movement and stillness simultaneously.'
-  },
-  {
-    id: 5,
-    title: 'Temporal Fragments',
-    artist: 'Various Artists',
-    year: '2026',
-    medium: 'Experimental Photography',
-    city: 'Goa',
-    theme: 'Memory',
-    image: Image16,
-    description: 'Time captured and fractured through experimental photographic processes.',
-    process: 'Multiple exposures over time create palimpsests of memory—overlapping moments that coexist.'
-  },
-  {
-    id: 6,
-    title: 'Voices in Shadow',
-    artist: 'Collective Work',
-    year: '2026',
-    medium: 'Portrait Series',
-    city: 'Delhi',
-    theme: 'Identity',
-    image: Image6,
-    description: 'A series exploring the tension between visibility and vulnerability.',
-    process: 'High contrast lighting with intentional shadows allows subjects to control their visibility.'
-  },
-  {
-    id: 7,
-    title: 'Memory Maps I',
-    artist: 'Various Artists',
-    year: '2026',
-    medium: 'Photographic Collage',
-    city: 'Chennai',
-    theme: 'Place',
-    image: Image17,
-    description: 'Cartographies of places that exist only in memory and imagination.',
-    process: 'Collage of photographs, maps, and personal documents creates layered geographical narratives.'
-  },
-  {
-    id: 8,
-    title: 'The Unseen Archive',
-    artist: 'Installation',
-    year: '2026',
-    medium: 'Mixed Media',
-    city: 'Goa',
-    theme: 'Memory',
-    image: Image8,
-    description: 'An archive of what was never archived—stories too marginal to preserve.',
-    process: 'Combines found photographs, contemporary documentation, and participatory image-making.'
-  },
-  {
-    id: 9,
-    title: 'Exploitation Series',
-    artist: 'Collective Work',
-    year: '2026',
-    medium: 'Documentary Photography',
-    city: 'Delhi',
-    theme: 'Labor',
-    image: Image9,
-    description: 'Visual documentation of labor conditions and worker resistance.',
-    process: 'Documentary photography created in partnership with labor organizers and workers themselves.'
-  },
-  {
-    id: 10,
-    title: 'Echoes of Displacement',
-    artist: 'Various Artists',
-    year: '2026',
-    medium: 'Experimental Photography',
-    city: 'Chennai',
-    theme: 'Labor',
-    image: Image10,
-    description: 'The lingering echoes of displacement captured through experimental techniques.',
-    process: 'Long exposure and intentional camera movement create ethereal images that evoke loss and memory.'
-  },
-  {
-    id: 11,
-    title: 'The Invisible Thread',
-    artist: 'Collective Work',
-    year: '2026',
-    medium: 'Documentary Photography',
-    city: 'Goa',
-    theme: 'Identity',
-    image: Image11,
-    description: 'The invisible connections that bind communities together.',
-    process: 'Photographs created in collaboration with community members, emphasizing shared stories and connections.'
-  },
-  {
-    id: 12,
-    title: 'Displacement Series II',
-    artist: 'Various Artists',
-    year: '2026',
-    medium: 'Mixed Media Photography',
-    city: 'Delhi',
-    theme: 'Memory',
-    image: Image12,
-    description: 'A continuation of the exploration of memory and displacement.',
-    process: 'Combines analog and digital techniques to create layered narratives of loss and resilience.'
-  },
-  {
-    id: 13,
-    title: 'The Archive of Absence',
-    artist: 'Installation',
-    year: '2026',
-    medium: 'Site-Specific Installation',
-    city: 'Chennai',
-    theme: 'Space',
-    image: Image13,
-    description: 'An installation that makes visible the absences in historical and contemporary narratives.',
-    process: 'Uses projection mapping and found materials to create a space that is both archive and memorial.'   
-  },
-  {
-    id: 14,
-    title: 'Memory Maps II',
-    artist: 'Collective Work',
-    year: '2026',
-    medium: 'Photographic Collage',
-    city: 'Goa',
-    theme: 'Place', 
-    image: Image14,
-    description: 'A continuation of the cartographies of memory and place.',
-    process: 'Collage of photographs, maps, and personal documents creates layered geographical narratives.'
-  },
-  {
-    id: 15,
-    title: 'Voices in Shadow II',
-    artist: 'Various Artists',
-    year: '2026',
-    medium: 'Portrait Series',
-    city: 'Delhi',
-    theme: 'Identity',
-    image: Image15,
-    description: 'A continuation of the exploration of visibility and vulnerability.',
-    process: 'High contrast lighting with intentional shadows allows subjects to control their visibility.'
-  },
-  {
-    id: 16,
-    title: 'Urban Vertices II',
-    artist: 'Collective Work',
-    year: '2026',
-    medium: 'Street Photography',
-    city: 'Chennai',
-    theme: 'Place',
-    image: Image16,
-    description: 'A continuation of the exploration of urban intersections.',
-    process       : 'Long exposure night photography capturing movement and stillness simultaneously.'
-  },
-  {
-    id: 17,
-    title: 'Temporal Fragments II',
-    artist: 'Various Artists',
-    year: '2026',
-    medium: 'Experimental Photography',
-    city: 'Goa',
-    theme: 'Memory',
-    image: Image17,
-    description: 'A continuation of the exploration of time and memory.',
-    process: 'Multiple exposures over time create palimpsests of memory—overlapping moments that coexist.'
-  },
-  {
-    id: 18,
-    title: 'The Unseen Archive II',
-    artist: 'Installation',
-    year: '2026',
-    medium: 'Mixed Media',
-    city: 'Delhi',
-    theme: 'Memory',
-    image: Image18,
-    description: 'A continuation of the archive of what was never archived.',
-    process: 'Combines found photographs, contemporary documentation, and participatory image-making.'  
-  }
-
+export const artworks = [
+  Image1, Image12, Image4, Image5, Image6, Image7, Image8,
+  Image9, Image10, Image11, Image13, Image14, Image15, Image16,
+  Image17, Image18, Image19, Image20, Image21, Image22, Image23, Image24,
+  Image25, Image26, Image27, Image28, Image29, Image30, Image31, Image32, Image3,Image2
 ];
 
 // ============================================
@@ -434,7 +237,7 @@ export const products: Product[] = [
     description: 'Limited Edition',
     image: CoffeeTableBook_3 ,
     category: 'Books',
-    details: 'A comprehensive 250-page catalog featuring all artworks, essays by contributors, and behind-the-scenes documentation of the collaborative process.',
+    details: 'A comprehensive 250-page catalogue featuring all artworks, essays by contributors, and behind-the-scenes documentation of the collaborative process.',
     dimensions: '12" × 16"',
     materials: 'Sustainably sourced paper, hardbound',
   },
@@ -480,7 +283,7 @@ export const locations: Location[] = [
     city: 'New Delhi',
     country: 'India',
     chapter: 'Chapter One',
-    status: 'Upcoming',
+    status: 'Complete',
     date: '10 March - 14 March 2026',
     description: '',
     venues: ['The Visual Art Gallery - India Habitat Centre'],
@@ -525,127 +328,35 @@ export const locations: Location[] = [
 ];
 
 // ============================================
-// ABOUT SECTIONS - Add/Edit about page content here
-// ============================================
-export const aboutSections: AboutSection[] = [
-  {
-    id: 1,
-    title: 'The Concept',
-    content: [
-      'A Voyage to Permanence is an ongoing, multi-city art and photography exhibition that explores themes of exploitation, memory, displacement, and the invisible threads connecting communities across geographical and temporal boundaries.',
-      'Unlike traditional exhibitions, A Voyage to Permanence is not a static event. It is a living archive that grows, transforms, and adapts as it moves through different cities, engaging with local communities and incorporating their stories into the broader narrative.',
-      'At its core, this project asks: How do we document lives that exist at the margins? How do we create ethical representations of exploitation without reproducing it? How can art serve as both witness and catalyst for social change?',
-    ],
-    image: 'https://images.unsplash.com/photo-1600903781679-7ea3cbc564c3?w=800',
-    order: 1,
-  },
-  {
-    id: 2,
-    title: 'Our Methodology',
-    content: [
-      'Every aspect of this exhibition—from concept to execution—is collaborative. We work directly with communities, ensuring they have agency over how their stories are told, which images are shown, and how they are represented.',
-      'Our process involves months of community engagement, workshops, participatory photography sessions, and ongoing dialogue. Participants are not subjects—they are co-creators, with equal say in editorial decisions.',
-      'We employ experimental photographic techniques—double exposure, film grain, layering, collage—to create images that reflect the complexity of memory and displacement. Each technical choice serves our ethical framework.',
-    ],
-    image: 'https://images.unsplash.com/photo-1660251406411-589fa0b05604?w=800',
-    order: 2,
-  },
-  {
-    id: 3,
-    title: 'Why This Matters',
-    content: [
-      'Exploitation leaves traces—sometimes visible, often not. This exhibition seeks to make the invisible visible, to create space for stories that are systematically excluded from official narratives.',
-      'By centering community voices and collaborative practices, we challenge traditional power dynamics in documentary and art-making. This is not extractive photography—it is a shared process of meaning-making.',
-      'The exhibition extends beyond gallery walls through publications, films, workshops, and ongoing community engagement. It is designed to be a resource, not just a spectacle.',
-    ],
-    image: 'https://images.unsplash.com/photo-1646363976310-ca9509f17260?w=800',
-    order: 3,
-  },
-];
-
-// ============================================
-// PHOTOGRAPHY PROCESS STEPS
-// ============================================
-export const photographyProcess: ProcessStep[] = [
-  {
-    id: 1,
-    icon: 'Lightbulb',
-    title: 'Concept & Collaboration',
-    description: 'Every photograph begins with conversation. We work with communities to understand their stories, their histories, what they want to share and what they want to keep private.',
-    image: 'https://images.unsplash.com/photo-1600903781679-7ea3cbc564c3?w=800',
-  },
-  {
-    id: 2,
-    icon: 'Users',
-    title: 'Community Partnership',
-    description: 'We don\'t photograph subjects—we collaborate with participants. Each person involved has agency over their representation, choosing how they want to be seen, if they want to be seen at all.',
-    image: 'https://images.unsplash.com/photo-1663043188237-01565028db93?w=800',
-  },
-  {
-    id: 3,
-    icon: 'Camera',
-    title: 'Experimental Techniques',
-    description: 'Using double exposure, film grain, analog processes, and digital manipulation, we create layered images that reflect the complexity of memory and displacement. Each technique is chosen intentionally.',
-    image: 'https://images.unsplash.com/photo-1660251406411-589fa0b05604?w=800',
-  },
-  {
-    id: 4,
-    icon: 'Film',
-    title: 'Development & Iteration',
-    description: 'Photos are reviewed with participants before exhibition. We adjust, revise, and sometimes start over based on feedback. The final image is always a collaborative decision.',
-    image: 'https://images.unsplash.com/photo-1646363976310-ca9509f17260?w=800',
-  },
-];
-
-// ============================================
-// PRODUCT CREATION PROCESS
-// ============================================
-export const productProcess: ProcessStep[] = [
-  {
-    id: 1,
-    icon: 'Palette',
-    title: 'Design Philosophy',
-    description: 'Each artifact begins with a question: How can this object extend the exhibition beyond gallery walls? How can it carry memory forward? We design with intention, ensuring every element aligns with our values.',
-    image: 'https://images.unsplash.com/photo-1552916353-1ce86325841d?w=800',
-  },
-  {
-    id: 2,
-    icon: 'BookOpen',
-    title: 'Content Curation',
-    description: 'Working with participants, we curate which images, stories, and documents to include. This is a collaborative editorial process where contributors have final say over their representation.',
-    image: 'https://images.unsplash.com/photo-1600903781679-7ea3cbc564c3?w=800',
-  },
-  {
-    id: 3,
-    icon: 'Scissors',
-    title: 'Ethical Production',
-    description: 'We partner exclusively with worker cooperatives and fair-wage producers. Materials are sustainably sourced. Production timelines respect workers\' needs. Quality over speed, always.',
-    image: 'https://images.unsplash.com/photo-1646363976310-ca9509f17260?w=800',
-  },
-  {
-    id: 4,
-    icon: 'Package',
-    title: 'Distribution & Access',
-    description: 'Artifacts are priced to cover production costs, not to generate profit. Proceeds support the ongoing exhibition and community partners. We also provide free copies to participants and community organizations.',
-    image: 'https://images.unsplash.com/photo-1761973193217-4908920fcad5?w=800',
-  },
-];
-
-// ============================================
 // EVENTS - Add/Edit upcoming events here
 // ============================================
 export const events: Event[] = [
   {
     id: 1,
     location: 'India Habitat Centre , New Delhi',
-    title: 'Chapter One',
+    title: 'The Voyage - Delhi',
     date: 'March 10-14, 2026',
+    type: 'Exhibition',
+    subtitle: 'Delhi chapter of A Voyage to Permanence',
+    summary: 'The opening chapter in New Delhi unfolds as a layered encounter between cinema, alternative print practice, performance, and public conversation.',
     bgVideo: heroVideo,
-    curatorNote: 'Total Note from the Curator about the event, the vision, the process, and what to expect. This note sets the tone for the exhibition and provides context for visitors.',
-    curatorVideo: curator_notes_video,
+    curatorNote: 'A Voyage to Permanence is a tribute to humanity and its trials and tribulations, without raising slogans or resorting to propagandist visual sensibility.',
+    curatorVideos: [curator_notes_video, curator_notes_video2],
+    curatorByline: 'Johny ML',
+    catalog: {
+      title: '',
+      description: 'A downloadable exhibition catalog for the India Habitat Centre chapter, designed to be browsed page by page like a moving book.',
+      image: eventCatalogCover,
+      pdfUrl: '/A Voyage to Permanence_IHC_Delhi_Catlogue.pdf',
+      items: [
+        { name: 'Exhibition Note', details: 'Curatorial framing, chapter context, and exhibition overview.' },
+        { name: 'Visual Archive', details: 'Selected prints, stills, and installation moments from the Delhi presentation.' },
+        { name: 'Public Memory', details: 'A collectible document audiences can browse online or download as a keepsake.' },
+      ],
+    },
     performanceVideos: [
       {
-        title: 'Live Performance: Dr. Boominathan',
+        title: '',
         description: 'A live performance blending oral narrative, experimental sound, and looped visuals from the exhibition archive.',
         videoUrl: Dr_Boominathan_Performance,
       },
@@ -659,45 +370,143 @@ export const events: Event[] = [
     ],
     reviewsAndPics: [
       {
-        title: 'A Powerful Journey',
-        author: 'Priya Sharma',
-        review: 'This exhibition challenged my perspective on memory and displacement. The curatorial approach and community engagement made it deeply personal and impactful.',
-        image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Athmaja A B',
+        review: 'The artistic rendering through visual and auditory experience moved me profoundly. The art spreads through the mind and physical space.',
+        image: '',
         rating: 5,
       },
       {
-        title: 'Voices That Matter',
-        author: 'Rajesh Kumar',
-        review: 'A remarkable documentation of stories that are often unheard. The experimental photography techniques bring these narratives to life in unexpected ways.',
-        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Akansha',
+        review: "The movie was amazing, can't imagine the black and white picture has this much deep thoughts, the coverage is wonderful. Waiting to watch the next one.",
+        image: '',
         rating: 5,
       },
       {
-        title: 'Emotional & Thoughtful',
-        author: 'Anjali Patel',
-        review: 'The exhibition stands out for its ethical approach to representation and community partnership. Each artwork carries weight and meaning beyond the visual.',
-        image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400',
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Hiroaki Shinada',
+        review: 'Abundance and depletion has become one more theme that I can photograph and express. Thank you.',
+        image: '',
         rating: 5,
       },
       {
-        title: 'A Must-See Experience',
-        author: 'Vikram Singh',
-        review: 'The layering of stories, images, and sounds creates an immersive experience. It questions what we think we know about history and labor.',
-        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Dhurv Soni',
+        review: 'A new aspect, new idea and well presented. Felt too good.',
+        image: '',
         rating: 5,
       },
       {
-        title: 'Inspiring & Provocative',
-        author: 'Meera Desai',
-        review: 'An exhibition that asks difficult questions and provides space for reflection. The collaborative process is as important as the final artwork.',
-        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Narender Ak Gupta',
+        review: 'Simply superb works.',
+        image: '',
         rating: 5,
       },
       {
-        title: 'Breaking Barriers',
-        author: 'Arjun Nair',
-        review: 'This showcase redefines what collaborative art can be. It gives agency to those whose stories are usually silenced. Truly transformative.',
-        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Shreya Kanoi',
+        review: 'Outstanding photographs! Love the compositions, the blackness of the black and the details of the greys! Great work. Great work. Would love to see such exhibits over and over again.',
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'O Aggarwal',
+        review: 'Amazing movie! Loved the idea behind it and outstanding.',
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Vivek Namdev',
+        review: 'The documentary showed a depth of human emotions and its journey. Very well explained the concept and meaning of old age. The Tremors is a well presented documentary.',
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'S Verma',
+        review: 'Touched deeply!',
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'P. Sainath',
+        review: 'Brilliant and riveting!',
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Tabriz Waris',
+        review: 'Such an immersive and mystical experience, beautifully shot and the frames move you from inside. Keep creating. Love from Delhi.',
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Manvi',
+        review: 'Spell-binding visuals. A journey into timelessness.',
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Sangeeta Gupta',
+        review: 'Touches a deep chord - Dhushor - a collective consciousness where we are done - I thought it was the end of dawn but it was dusk - so it really a blur.',
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Jasbirat Singh',
+        review: 'It is always lovely to see something raw and original.',
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Ayushi',
+        review: 'I thought at the start of the movie it was about grappling loneliness, but the name of the movie was justified at the end. It is truly enriching to know that the movie has enlightened us about Tremors. Nice movie!',
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Rakesh Sharma',
+        review: "A Voyage to Permanence - visual poetry depicting the sheer handwork of our backbone, i.e. our own brothers and sisters working day in and day out, putting their own bodies in all sorts of conditions so that we may enjoy our materialistic privileges. It's an empathic tribute to and acknowledgement of our backbone with iron steel spine.",
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Ranjeev Sachdeva',
+        review: "Very impressive work, very unique and artistic approach, the studio and gallery is vibrating with Purandar Sir's excellence both behind the camera and in presence too. Keep shining!",
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'BJ',
+        review: 'Impression of Mingling provides a dual perspective of stillness and movement - permanent and transient - on the road and on the side path - dynamic and static.',
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Aditi Raj Sharda',
+        review: 'Intriguing is the 1st word that bleeds through. Ch1 introduces melancholy. Ch2 expands on the tonality of dread and melancholy. Ch3 concludes the perception of it. Eccentric composition of light and shadows, contrast, dullness and sharpness, flora and fauna.',
+        image: '',
+        rating: 5,
+      },
+      {
+        title: 'Delhi Exhibition Visitors Thoughts',
+        author: 'Biju V',
+        review: "I feel it's real - it's not purposefully shouted - fantastic. People should have patience to watch these films. Must watch!",
+        image: '',
         rating: 5,
       },
     ],

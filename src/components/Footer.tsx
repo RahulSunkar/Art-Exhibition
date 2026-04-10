@@ -6,7 +6,7 @@ export function Footer() {
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-12 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <h3 className=" Neue text-2xl mb-4" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>A Voyage to Permanence</h3>
+            <h3 className="Neue text-2xl mb-4" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 600 }}>A Voyage to Permanence</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               An ongoing exploration of memory, exploitation, and the invisible threads that connect us all.
             </p>
