@@ -585,9 +585,7 @@ function CuratorVideoPlayer({
   const videoId = `curator-${videoUrl.slice(0, 10)}`;
 
   const handlePlay = () => {
-    if (activaVideoId && activaVideoId !== videoId) {
-      return; // Another video is playing
-    }
+
     setIsPlaying(true);
     onVideoPlay?.();
   };
@@ -731,9 +729,6 @@ function VideoItem({
   const videoId = `perf-${i}-${v.videoUrl.slice(0, 10)}`;
 
   const handlePlayClick = () => {
-    if (activaVideoId && activaVideoId !== videoId) {
-      return; // Another video is playing
-    }
     setPlaying(true);
     onVideoPlay?.();
   };
@@ -977,9 +972,7 @@ function AudienceVideoItem({
   const videoId = `audience-${i}-${videoUrl.slice(0, 10)}`;
 
   const handlePlayClick = () => {
-    if (activaVideoId && activaVideoId !== videoId) {
-      return; // Another video is playing
-    }
+ 
     setPlaying(true);
     onVideoPlay?.(i);
   };
@@ -1493,7 +1486,7 @@ export function Events() {
         <div
           style={{
             position: 'absolute',
-            top: isMobile ? '30%' : '80%',
+            top: isMobile ? '55%' : '80%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
             width: 'min(92vw, 980px)',
@@ -1698,7 +1691,7 @@ export function Events() {
               />
             ))}
           </div>
-          
+
         </motion.div>
       )}
 

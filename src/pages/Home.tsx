@@ -176,7 +176,7 @@ export function Home() {
           EVENT SECTION — LIGHT GREY
        ══════════════════════════════════════════ */}
       <section style={{ background: '#f9f9f9', position: 'relative', overflow: 'hidden' }} className="py-24 md:py-36 lg:py-48">
-        <div className="relative z-10" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(1.5rem, 6vw, 5rem)' }}>
+        <div className="relative z-10" style={{ maxWidth: '1440px', margin: '50px', padding: '20 clamp(1.5rem, 6vw, 5rem)' }}>
 
           {/* Title — Slide from left with rotation */}
           <motion.h2
