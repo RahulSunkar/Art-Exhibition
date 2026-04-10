@@ -1486,7 +1486,7 @@ export function Events() {
         <div
           style={{
             position: 'absolute',
-            top: isMobile ? '55%' : '80%',
+            top: isMobile ? '70%' : '80%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
             width: 'min(92vw, 980px)',
